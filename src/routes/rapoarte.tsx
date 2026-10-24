@@ -24,7 +24,7 @@ function Rapoarte() {
   const lista = [...(data ?? [])].sort((a, b) => b.data.localeCompare(a.data));
   return (
     <>
-      <PageHeader title="Rapoarte" subtitle="Ce a verificat agentul, pas cu pas." />
+      <PageHeader title="Rapoarte" />
       {error && <p className="mb-4 text-sm text-destructive">{error.message}</p>}
       {!data ? (
         <Skeleton className="h-80 w-full rounded-3xl" />
