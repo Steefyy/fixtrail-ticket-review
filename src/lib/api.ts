@@ -121,7 +121,7 @@ export function createHttpApi(base: string): VerifixApi {
   };
 }
 
-const useMock = (import.meta.env.VITE_USE_MOCK ?? "true") !== "false";
+const useMock = (import.meta.env["VITE_USE_MOCK"] ?? "true") !== "false";
 export const api: VerifixApi = useMock
   ? createMockApi()
-  : createHttpApi(import.meta.env.VITE_API_URL ?? "http://localhost:8000");
+  : createHttpApi(import.meta.env["VITE_API_URL"] ?? "http://localhost:8000");

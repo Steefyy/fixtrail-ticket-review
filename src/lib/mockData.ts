@@ -79,7 +79,7 @@ function build(): Ticket[] {
   for (const s of seeds) totals[s.clusterId] = (totals[s.clusterId] ?? 0) + s.nrRaportari;
   const list: Ticket[] = seeds.map((s, i) => ({
     dataDeschiderii: `2026-10-${String(1 + (i % 20)).padStart(2, "0")}`,
-    canal: ["Web", "Email", "Rețele sociale", "Call center"][i % 4],
+    canal: ["Web", "Email", "Rețele sociale", "Call center"][i % 4] ?? "Web",
     functionalitate: s.categorie,
     descriere: s.titlu + ".",
     pasiVerificare: null,
@@ -112,7 +112,7 @@ export function buildClusters(tickets: Ticket[]): Cluster[] {
     const sev = ts.map((t) => t.severitate).filter(Boolean) as Severitate[];
     return {
       id,
-      titlu: ts[0].titlu,
+      titlu: ts[0]?.titlu ?? id,
       ticketIds: ts.map((t) => t.id),
       totalRaportari: ts.reduce((a, t) => a + t.nrRaportari, 0),
       severitateMax: sev.sort((a, b) => SEVERITATE_RANG[a] - SEVERITATE_RANG[b])[0] ?? "Mică",
@@ -170,7 +170,7 @@ export function createMockState(): MockState {
     tickets: build(),
     reports: buildReports(),
     settings: { versiuneLive: "3.14.0", intervalMinute: 2, wizzBeesUrl: "http://localhost:5173" },
-    ultimaRulare: RULARE,
+    ultimaRulare: new Date(Date.now() - 60000).toISOString(),
     ruleazaAcum: false,
   };
 }
