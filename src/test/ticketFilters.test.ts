@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createMockState } from "@/lib/mockData";
-import { filterTickets, parseTicketFilters, ticketVerdict, verificationDisabledReason } from "@/lib/ticketFilters";
+import { advancedFilterCount, filterTickets, parseTicketFilters, ticketVerdict, verificationDisabledReason } from "@/lib/ticketFilters";
 
 const tickets = createMockState().tickets;
 const base = tickets[0];
