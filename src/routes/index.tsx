@@ -30,7 +30,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function Kpi({ label, value, icon, tone, footer }: { label: string; value?: number | undefined; icon: ReactNode; tone: string; footer?: ReactNode }) {
+function Kpi({ label, value, icon, tone, footer }: { label: string; value?: number | string | undefined; icon: ReactNode; tone: string; footer?: ReactNode }) {
   return (
     <div className="group rounded-3xl border border-border/50 bg-card p-4 shadow-sm transition-all sm:p-6 duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
       <div className="flex min-h-14 flex-col-reverse items-start justify-between gap-2 sm:flex-row sm:gap-3 text-sm font-medium leading-5 text-muted-foreground">
@@ -189,7 +189,7 @@ function Index() {
         <Kpi label="Fix-uri confirmate" value={data?.fixuriConfirmate} icon={<CheckCircle2 className="h-5 w-5" />} tone="tone-success" />
         <Kpi label="Fix-uri invalidate de agent" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-5 w-5" />} tone="tone-ai" />
         <Kpi label="Necesită verificare manuală" value={data?.necesitaVerificareManuala} icon={<Hand className="h-5 w-5" />} tone="tone-warning" />
-        <Kpi label="Probleme reduse după release" value={impacts.isPending ? undefined : impacts.error || !impacts.data?.length ? undefined : countReducedProblems(impacts.data)} icon={<TrendingDown className="h-5 w-5" />} tone="tone-success" footer={impacts.error ? "Impactul post-release nu a putut fi încărcat." : impacts.data?.length ? <DemoImpactBadge /> : impacts.isPending ? undefined : "Impactul post-release nu este încă disponibil."} />
+        <Kpi label="Probleme reduse după release" value={impacts.isPending ? undefined : impacts.error || !impacts.data?.length ? "—" : countReducedProblems(impacts.data)} icon={<TrendingDown className="h-5 w-5" />} tone="tone-success" footer={impacts.error ? "Impactul post-release nu a putut fi încărcat." : impacts.data?.length ? <DemoImpactBadge /> : impacts.isPending ? undefined : "Impactul post-release nu este încă disponibil."} />
       </div>
       <Prioritati />
       <SintezaExecutiva data={data} />
