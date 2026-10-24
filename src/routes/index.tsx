@@ -29,18 +29,16 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function Kpi({ label, value, icon, tone, footer }: { label: string; value?: number | string | undefined; icon: ReactNode; tone: string; footer?: ReactNode }) {
+function Kpi({ label, value, icon, tone }: { label: string; value?: number | string | undefined; icon: ReactNode; tone: string }) {
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/60 bg-card p-6 shadow-sm transition-colors duration-300 hover:border-primary/40">
-      <span aria-hidden className="absolute inset-x-6 top-0 h-px bg-primary/0 transition-colors duration-300 group-hover:bg-primary/60" />
-      <div className="flex min-h-14 flex-col-reverse items-start justify-between gap-2 sm:flex-row sm:gap-3 text-sm font-medium leading-5 text-muted-foreground">
-        <span className="max-w-[220px] pt-1">{label}</span>
-        <span className="grid h-9 w-9 shrink-0 sm:h-11 sm:w-11 place-items-center rounded-full border border-border/60 bg-muted/60 text-muted-foreground transition-colors group-hover:text-primary">{icon}</span>
+    <div className="min-w-0 p-4 sm:p-5">
+      <div className="flex items-center justify-between gap-2 text-xs font-medium text-muted-foreground">
+        <span className="min-w-0">{label}</span>
+        <span className="shrink-0 [&>svg]:h-4 [&>svg]:w-4">{icon}</span>
       </div>
-      <div className={cn("mt-5 text-3xl font-extrabold sm:text-4xl tabular-nums", tone)}>
-        {value === undefined ? <Skeleton className="h-9 w-16" /> : value}
+      <div className={cn("mt-2 text-2xl font-bold tabular-nums sm:text-3xl", tone)}>
+        {value === undefined ? <Skeleton className="h-8 w-14" /> : value}
       </div>
-      {footer && <div className="mt-3 text-xs leading-5 text-muted-foreground">{footer}</div>}
     </div>
   );
 }
@@ -103,7 +101,7 @@ function SintezaExecutiva({ data }: { data: Stats | undefined }) {
   if (!data) return <Skeleton className="mt-7 h-72 w-full rounded-3xl" />;
   const eficacitate = procentConfirmate(data.fixuriConfirmate, data.fixuriInvalidate);
   return (
-    <section className="mt-12 border-t border-border/60 pt-8">
+    <section className="mt-8 border-t border-border/60 pt-6">
       <h2 className="text-base font-semibold">Sinteză executivă</h2>
       <div className="mt-5 grid items-center gap-6 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
         <dl className="grid grid-cols-2 gap-4">
@@ -137,9 +135,9 @@ function Prioritati() {
   };
   return (
     <TooltipProvider>
-      <section className="mt-12">
+      <section className="mt-8">
         <h2 className="text-base font-semibold">Priorități</h2>
-        <ol className="mt-4 grid gap-3">
+        <ol className="mt-3 divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
           {vizibile.map((c, i) => {
             const asociate = tichete.filter((t) => c.ticketIds.includes(t.id));
             const verdict = verdicturi[verificareCluster(asociate) ?? "neverificat"];
@@ -147,12 +145,12 @@ function Prioritati() {
             return (
               <li key={c.id}>
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   disabled={!tichet}
                   onClick={() => { if (tichet) setSelectat(tichet.id); }}
-                  className="group h-auto w-full justify-start gap-3 whitespace-normal rounded-2xl border-border/60 bg-card p-4 text-left shadow-sm hover:border-primary/40 hover:bg-muted/40 sm:gap-4 sm:p-5"
+                  className="group h-auto w-full justify-start gap-3 whitespace-normal rounded-none px-4 py-3 text-left hover:bg-muted/50 hover:text-foreground sm:gap-4 sm:px-5"
                 >
-                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-muted text-sm font-bold tabular-nums text-muted-foreground">{i + 1}</span>
+                  <span className="w-5 shrink-0 text-center text-sm font-medium tabular-nums text-muted-foreground">{i + 1}</span>
                   <span className="grid min-w-0 flex-1 gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-x-5">
                     <span className="line-clamp-2 break-words text-sm font-semibold text-foreground sm:text-base">{c.titlu}</span>
                     <span className="flex flex-wrap items-center gap-2 sm:row-start-2">
@@ -161,7 +159,7 @@ function Prioritati() {
                     </span>
                     <span className={cn("w-fit rounded-full border px-2.5 py-1 text-xs font-medium sm:col-start-2 sm:row-span-2 sm:row-start-1", verdict.tone)}>{verdict.label}</span>
                   </span>
-                  <ArrowRight className="text-muted-foreground transition-transform group-hover:translate-x-1 motion-reduce:transform-none" />
+                  <ArrowRight className="text-muted-foreground transition-transform " />
                 </Button>
               </li>
             );
@@ -182,10 +180,10 @@ function Index() {
     <>
       <PageHeader title="Prezentare generală" />
       {error && <p className="mb-4 text-sm text-destructive">{error.message}</p>}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+      <div className="grid grid-cols-2 overflow-hidden rounded-xl border border-border bg-card lg:grid-cols-4 [&>*]:border-border max-lg:[&>*:nth-child(odd)]:border-r max-lg:[&>*:nth-child(-n+2)]:border-b lg:[&>*:not(:last-child)]:border-r">
         <Kpi label="Total tichete" value={data?.totalTichete} icon={<ListChecks className="h-5 w-5" />} tone="text-ink" />
         <Kpi label="Fix-uri confirmate" value={data?.fixuriConfirmate} icon={<CheckCircle2 className="h-5 w-5" />} tone="text-ink" />
-        <Kpi label="Fix-uri invalidate de agent" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-5 w-5" />} tone="text-ink" />
+        <Kpi label="Fix-uri invalidate" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-5 w-5" />} tone={data?.fixuriInvalidate ? "text-danger-ink" : "text-ink"} />
         <Kpi label="Probleme reduse după release" value={impacts.isPending ? undefined : impacts.error || !impacts.data?.length ? "—" : countReducedProblems(impacts.data)} icon={<TrendingDown className="h-5 w-5" />} tone="text-ink" />
       </div>
       <Prioritati />
