@@ -48,7 +48,7 @@ function TicketsPage() {
   const reset = () => void navigate({ search: {}, replace: true });
   const chips: { key: string; label: string; remove: () => void }[] = [];
   if (filters.q) chips.push({ key: "q", label: `Căutare: ${filters.q}`, remove: () => update({ q: undefined }) });
-  for (const [key, label] of [["status", "Status"], ["severitate", "Severitate"] as const) {
+  for (const [key, label] of [["status", "Status"], ["severitate", "Severitate"]] as const) {
     for (const value of filters[key] ?? []) chips.push({ key: `${key}-${value}`, label: `${label}: ${value}`, remove: () => {
       const next = filters[key]?.filter((v) => v !== value);
       update({ [key]: next?.length ? next : undefined });
