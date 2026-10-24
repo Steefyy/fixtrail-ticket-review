@@ -30,20 +30,21 @@ function SchedulerIndicator() {
   }, []);
   const running = data?.ruleazaAcum;
   return (
-    <div className="hidden items-center gap-2.5 rounded-full border border-border/70 bg-card px-3.5 py-2 text-xs tabular-nums text-muted-foreground xl:flex">
-      <span className="relative flex h-2 w-2">
-        {running && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />}
-        <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+    <div className="hidden items-center gap-2.5 xl:flex">
+      <span className="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center" aria-hidden="true">
+        <span className={cn("absolute inline-flex h-full w-full rounded-full bg-success", running ? "animate-ping opacity-75" : "animate-pulse opacity-60")} />
+        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-success" />
       </span>
-      {running ? (
-        <span className="font-medium text-foreground">Agentul verifică acum…</span>
-      ) : (
-        <span>
-          Ultima verificare: {relativ(data?.ultimaRulare ?? null, now, false)} · Următoarea{" "}
-          {relativ(data?.urmatoareaRulare ?? null, now, true)}
-        </span>
-      )}
-    </div>
+      <div className="flex items-center gap-2.5 rounded-full border border-border/70 bg-card px-3.5 py-2 text-xs tabular-nums text-muted-foreground shadow-sm">
+        {running ? (
+          <span className="font-medium text-foreground">Agentul verifică acum…</span>
+        ) : (
+          <span>
+            Ultima verificare: {relativ(data?.ultimaRulare ?? null, now, false)} · Următoarea{" "}
+            {relativ(data?.urmatoareaRulare ?? null, now, true)}
+          </span>
+        )}
+      </div>
   );
 }
 
@@ -75,23 +76,29 @@ function Sidebar({ collapsed }: { collapsed: boolean }) {
       </nav>
       <div className="mt-auto border-t border-sidebar-border/70 pt-6">
         {!collapsed && <p className="mb-3 px-2 text-xs font-medium text-muted-foreground">Rol</p>}
-        <div className={cn("grid rounded-full bg-muted p-1 text-xs", collapsed ? "grid-cols-1 gap-1" : "grid-cols-2")} role="group" aria-label="Rol">
-          {(["pm", "dev"] as const).map((r) => (
-            <Button
-              key={r}
-              variant="ghost"
-              aria-pressed={rol === r}
-              aria-label={r === "pm" ? "Product Manager" : "Developer"}
-              title={collapsed ? (r === "pm" ? "Product Manager" : "Developer") : undefined}
-              onClick={() => setRol(r)}
-              className={cn(
-                "h-10 min-w-0 rounded-full px-2 text-[11px] font-medium",
-                rol === r ? "bg-card text-foreground shadow-sm hover:bg-card" : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {collapsed ? (r === "pm" ? <BriefcaseBusiness /> : <Code2 />) : (r === "pm" ? "Product Manager" : "Developer")}
-            </Button>
-          ))}
+        <div className={cn("grid rounded-full border border-border/60 bg-muted/70 p-1 text-xs", collapsed ? "grid-cols-1 gap-1" : "grid-cols-2 gap-1")} role="group" aria-label="Rol">
+          {(["pm", "dev"] as const).map((r) => {
+            const activ = rol === r;
+            const nume = r === "pm" ? "Product Manager" : "Developer";
+            return (
+              <button
+                key={r}
+                type="button"
+                aria-pressed={activ}
+                aria-label={nume}
+                title={collapsed ? nume : undefined}
+                onClick={() => setRol(r)}
+                className={cn(
+                  "flex h-10 min-w-0 cursor-pointer items-center justify-center gap-2 rounded-full border border-transparent px-2 text-[11px] font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  activ
+                    ? cn(r === "pm" ? "tone-success" : "tone-info", "font-semibold shadow-sm")
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {collapsed ? (r === "pm" ? <BriefcaseBusiness className="h-4 w-4" /> : <Code2 className="h-4 w-4" />) : nume}
+              </button>
+            );
+          })}
         </div>
       </div>
     </aside>

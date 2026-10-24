@@ -1,14 +1,15 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
 export type Rol = "pm" | "dev";
-const KEY = "verifix.rol";
+const KEY = "aftercheck.rol";
+const OLD_KEY = "verifix.rol";
 const Ctx = createContext<{ rol: Rol; setRol: (r: Rol) => void }>({ rol: "pm", setRol: () => {} });
 
 export function RoleProvider({ children }: { children: ReactNode }) {
   const [rol, setRolState] = useState<Rol>("pm");
   useEffect(() => {
     try {
-      const v = localStorage.getItem(KEY);
+      const v = localStorage.getItem(KEY) ?? localStorage.getItem(OLD_KEY);
       if (v === "pm" || v === "dev") setRolState(v);
     } catch {
       /* ignore */
