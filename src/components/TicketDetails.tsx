@@ -38,7 +38,8 @@ export function TicketDetails({ ticket, onClose }: { ticket: Ticket | undefined;
   const busy = run.isPending || !!scheduler.data?.ruleazaAcum;
   const reason = ticket ? verificationDisabledReason(ticket) ?? (busy ? "O verificare este deja în curs." : undefined) : undefined;
   const verdict = ticket ? ticketVerdict(ticket) : "neverificat";
-  const { pasi, asteptat } = ticket?.pasiVerificare ? parsePasi(ticket.pasiVerificare) : { pasi: [], asteptat: null };
+  const pasiText = ticket?.pasiVerificare ?? null;
+  const { pasi, asteptat } = pasiText ? parsePasi(pasiText) : { pasi: [] as string[], asteptat: null as string | null };
   return <Sheet open={!!ticket} onOpenChange={(open) => { if (!open) onClose(); }}>
     <SheetContent className="w-full overflow-y-auto sm:w-[480px] sm:max-w-[480px]">
       {ticket && <>
