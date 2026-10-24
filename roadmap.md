@@ -17,3 +17,8 @@
 
 # Real backend corrections
 - [x] "Verifică acum" button back, steps with 3 states + screenshots + lightbox, Priorități table, donut %, Setări, Import, Rapoarte + report page.
+
+# Pagina Tichete
+- [ ] Filtre în URL, scurtături numerice și tabel după prioritatea primită.
+- [ ] Detalii laterale, tichete asociate și verificare individuală.
+- [ ] Verifică filtrele, navigarea, stările și testele.
