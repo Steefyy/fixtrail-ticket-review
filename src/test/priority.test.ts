@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createMockState } from "@/lib/mockData";
 import { computeStats } from "@/lib/api";
+import { poatePrelua } from "@/lib/priority";
 
 describe("prioritizare", () => {
   const t = createMockState().tickets;
@@ -17,5 +18,19 @@ describe("prioritizare", () => {
     expect(s.necesitaVerificareManuala).toBe(3);
     expect(s.fixuriInvalidate).toBe(3);
     expect(s.fixuriConfirmate).toBe(3);
+  });
+});
+
+describe("rol developer", () => {
+  const t = createMockState().tickets;
+  it("numără doar tichetele pe care developerul le poate prelua", () => {
+    const s = computeStats(t);
+    expect(s.ticheteDisponibile).toBe(6);
+    expect(s.totalTichete).toBe(20);
+  });
+  it("un tichet deja accesat nu mai poate fi preluat", () => {
+    expect(poatePrelua(t.find((x) => x.id === "WB-1040")!)).toBe(true); // Nou
+    expect(poatePrelua(t.find((x) => x.id === "WB-1027")!)).toBe(false); // În lucru
+    expect(poatePrelua(t.find((x) => x.id === "WB-1016")!)).toBe(false); // Rezolvat – fix livrat
   });
 });
