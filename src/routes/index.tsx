@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CheckCircle2, ListChecks, RotateCcw, Hand } from "lucide-react";
 import type { ReactNode } from "react";
+import { PieChart, Pie, Cell } from "recharts";
 import { PageHeader } from "@/components/AppHeader";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useStats } from "@/hooks/useVerifix";
 
