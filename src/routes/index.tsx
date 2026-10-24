@@ -11,10 +11,10 @@ import { useStats } from "@/hooks/useVerifix";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Prezentare generală · Verifix" },
-      { name: "description", content: "Verifix: verificare automată a fix-urilor livrate pentru tichetele de suport." },
-      { property: "og:title", content: "Prezentare generală · Verifix" },
-      { property: "og:description", content: "Fix-uri confirmate, invalidate și tichete care necesită verificare manuală." },
+      { title: "Prezentare generală · AfterCheck" },
+      { name: "description", content: "AfterCheck — Post-Release Inner Loop Intelligence & AI Testing Agent. Verificare automată a fix-urilor livrate." },
+      { property: "og:title", content: "Prezentare generală · AfterCheck" },
+      { property: "og:description", content: "AfterCheck: fix-uri confirmate, invalidate și tichete care necesită verificare manuală." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -99,7 +99,7 @@ function Index() {
   const { data, error } = useStats();
   return (
     <>
-      <PageHeader title="Prezentare generală" subtitle="Starea fix-urilor verificate de AI Testing Agent." />
+      <PageHeader title="Prezentare generală" subtitle="Post-Release Inner Loop Intelligence & AI Testing Agent" />
       {error && <p className="mb-4 text-sm text-destructive">{error.message}</p>}
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <Kpi label="Total tichete" value={data?.totalTichete} icon={<ListChecks className="h-5 w-5" />} tone="tone-info" />

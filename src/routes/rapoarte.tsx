@@ -4,10 +4,10 @@ import { PageHeader, Placeholder } from "@/components/AppHeader";
 export const Route = createFileRoute("/rapoarte")({
   head: () => ({
     meta: [
-      { title: "Rapoarte · Verifix" },
-      { name: "description", content: "Rapoartele AI Testing Agent în Verifix." },
-      { property: "og:title", content: "Rapoarte · Verifix" },
-      { property: "og:description", content: "Rapoartele AI Testing Agent în Verifix." },
+      { title: "Rapoarte · AfterCheck" },
+      { name: "description", content: "Rapoartele AI Testing Agent în AfterCheck." },
+      { property: "og:title", content: "Rapoarte · AfterCheck" },
+      { property: "og:description", content: "Rapoartele AI Testing Agent în AfterCheck." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
