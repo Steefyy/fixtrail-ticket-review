@@ -1,4 +1,4 @@
-import type { Cluster, Raport, Settings, Severitate, Status, Ticket } from "@/types";
+import type { Cluster, Raport, Severitate, Status, Ticket } from "@/types";
 import { SEVERITATE_RANG } from "@/types";
 import { comparaPrioritate } from "./priority";
 
@@ -182,7 +182,7 @@ function buildReports(): Raport[] {
 export interface MockState {
   tickets: Ticket[];
   reports: Raport[];
-  settings: Settings;
+  settings: { versiuneLive: string; intervalMinute: number; wizzBeesUrl: string };
   ultimaRulare: string | null;
   ruleazaAcum: boolean;
 }

@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import type { Settings } from "@/types";
 
 export const useTickets = () => useQuery({ queryKey: ["tickets"], queryFn: api.getTickets });
 export const useTicket = (id: string) => useQuery({ queryKey: ["tickets", id], queryFn: () => api.getTicket(id) });
@@ -9,7 +8,6 @@ export const useClusters = () => useQuery({ queryKey: ["clusters"], queryFn: api
 export const useReports = (ticketId?: string) =>
   useQuery({ queryKey: ["reports", ticketId ?? "all"], queryFn: () => api.getReports(ticketId) });
 export const useReport = (id: string) => useQuery({ queryKey: ["report", id], queryFn: () => api.getReport(id) });
-export const useSettings = () => useQuery({ queryKey: ["settings"], queryFn: api.getSettings });
 export const useSchedulerStatus = () =>
   useQuery({
     queryKey: ["scheduler"],
@@ -29,8 +27,4 @@ export const useRunVerification = () => {
 export const useImport = () => {
   const inv = useInvalidateAll();
   return useMutation({ mutationFn: (file: File) => api.importExcel(file), onSuccess: inv });
-};
-export const useUpdateSettings = () => {
-  const inv = useInvalidateAll();
-  return useMutation({ mutationFn: (s: Settings) => api.updateSettings(s), onSuccess: inv });
 };

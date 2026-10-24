@@ -71,11 +71,6 @@ export interface Stats {
   rataRedeschidere: number;
   raportariPeCategorie: { categorie: string; raportari: number; tichete: number }[];
 }
-export interface Settings {
-  versiuneLive: string;
-  intervalMinute: number;
-  wizzBeesUrl: string;
-}
 export interface SchedulerStatus {
   ruleazaAcum: boolean;
   ultimaRulare: string | null;
