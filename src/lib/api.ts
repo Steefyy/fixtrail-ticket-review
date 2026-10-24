@@ -13,6 +13,7 @@ export interface AfterCheckApi {
   importExcel(file: File): Promise<ImportResult>;
   runVerification(ticketIds?: string[]): Promise<SchedulerStatus>;
   getSchedulerStatus(): Promise<SchedulerStatus>;
+  clearDemoData(): Promise<{ ticheteSterse: number; rapoarteSterse: number }>;
 }
 
 export function computeStats(tickets: Ticket[]): Stats {
@@ -86,6 +87,12 @@ export function createMockApi(): AfterCheckApi {
       return delay(status());
     },
     getSchedulerStatus: () => delay(status()),
+    clearDemoData: async () => {
+      const rezultat = { ticheteSterse: st.tickets.length, rapoarteSterse: st.reports.length };
+      st.tickets = [];
+      st.reports = [];
+      return delay(rezultat);
+    },
   };
 }
 
@@ -110,6 +117,7 @@ export function createHttpApi(base: string): AfterCheckApi {
     },
     runVerification: (ticketIds) => req("/api/verify/run", json("POST", { ticketIds })),
     getSchedulerStatus: () => req("/api/verify/status"),
+    clearDemoData: () => req("/api/demo-data", { method: "DELETE" }),
   };
 }
 

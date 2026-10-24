@@ -1,9 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef, useState } from "react";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2, Trash2, Upload } from "lucide-react";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
-import { useImport } from "@/hooks/useVerifix";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+  AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useClearDemoData, useImport } from "@/hooks/useVerifix";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/import")({
@@ -53,6 +58,41 @@ function ImportPage() {
           <Button asChild variant="premium" className="mt-4"><Link to="/">Mergi la Prezentare generală</Link></Button>
         </div>
       )}
+      <ResetDemoData />
     </>
+  );
+}
+
+function ResetDemoData() {
+  const clear = useClearDemoData();
+  const [open, setOpen] = useState(false);
+  const confirma = () => {
+    setOpen(false);
+    clear.mutate(undefined, {
+      onSuccess: (r) => toast.success(`Date șterse: ${r.ticheteSterse} tichete și ${r.rapoarteSterse} rapoarte`),
+      onError: (e) => toast.error(e.message),
+    });
+  };
+  return (
+    <div className="mt-10 flex justify-end border-t border-border/60 pt-4">
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogTrigger asChild>
+          <Button variant="ghost" size="sm" disabled={clear.isPending} className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive">
+            {clear.isPending ? <Loader2 className="animate-spin" /> : <Trash2 />}
+            {clear.isPending ? "Se șterg…" : "Resetează datele demo"}
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Resetează datele demo</AlertDialogTitle>
+            <AlertDialogDescription>Ștergi toate tichetele și rapoartele? Setările aplicației vor fi păstrate.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Anulează</AlertDialogCancel>
+            <AlertDialogAction onClick={confirma} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Șterge</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
   );
 }
