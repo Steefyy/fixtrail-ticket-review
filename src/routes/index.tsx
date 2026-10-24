@@ -34,7 +34,7 @@ function Kpi({ label, value, icon, tone, footer }: { label: string; value?: numb
     <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/60 bg-card p-6 shadow-sm transition-colors duration-300 hover:border-primary/40">
       <span aria-hidden className="absolute inset-x-6 top-0 h-px bg-primary/0 transition-colors duration-300 group-hover:bg-primary/60" />
       <div className="flex min-h-14 flex-col-reverse items-start justify-between gap-2 sm:flex-row sm:gap-3 text-sm font-medium leading-5 text-muted-foreground">
-        <span className="max-w-[150px] pt-1">{label}</span>
+        <span className="max-w-[220px] pt-1">{label}</span>
         <span className="grid h-9 w-9 shrink-0 sm:h-11 sm:w-11 place-items-center rounded-full border border-border/60 bg-muted/60 text-muted-foreground transition-colors group-hover:text-primary">{icon}</span>
       </div>
       <div className={cn("mt-5 text-3xl font-extrabold sm:text-4xl tabular-nums", tone)}>
