@@ -1,17 +1,17 @@
-import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ShieldCheck, Play } from "lucide-react";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState, type ReactNode } from "react";
+import { ShieldCheck, Play, LayoutDashboard, Ticket, FileText, Upload, Settings, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRole } from "@/hooks/useRole";
 import { useRunVerification, useSchedulerStatus } from "@/hooks/useVerifix";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { to: "/", label: "Prezentare generală" },
-  { to: "/tichete", label: "Tichete" },
-  { to: "/rapoarte", label: "Rapoarte" },
-  { to: "/import", label: "Import" },
-  { to: "/setari", label: "Setări" },
+  { to: "/", label: "Prezentare generală", icon: LayoutDashboard },
+  { to: "/tichete", label: "Tichete", icon: Ticket },
+  { to: "/rapoarte", label: "Rapoarte", icon: FileText },
+  { to: "/import", label: "Import", icon: Upload },
+  { to: "/setari", label: "Setări", icon: Settings },
 ] as const;
 
 function relativ(iso: string | null, now: number, viitor: boolean) {
@@ -30,10 +30,10 @@ function SchedulerIndicator() {
   }, []);
   const running = data?.ruleazaAcum;
   return (
-    <div className="hidden items-center gap-2 text-xs text-muted-foreground md:flex">
+    <div className="hidden items-center gap-2 rounded-full border bg-card px-3 py-1.5 text-xs text-muted-foreground lg:flex">
       <span className="relative flex h-2 w-2">
         {running && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />}
-        <span className={cn("relative inline-flex h-2 w-2 rounded-full", running ? "bg-primary" : "bg-success")} />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
       </span>
       {running ? (
         <span className="font-medium text-foreground">Agentul verifică acum…</span>
@@ -47,66 +47,101 @@ function SchedulerIndicator() {
   );
 }
 
-export function AppHeader() {
+function Sidebar() {
   const { rol, setRol } = useRole();
-  const run = useRunVerification();
-  const sched = useSchedulerStatus();
   return (
-    <header className="sticky top-0 z-20 border-b bg-card/90 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4">
-        <Link to="/" className="flex items-center gap-2 font-semibold tracking-tight">
-          <span className="grid h-7 w-7 place-items-center rounded-md bg-primary text-primary-foreground">
-            <ShieldCheck className="h-4 w-4" />
-          </span>
-          Verifix
-        </Link>
-        <div className="ml-auto flex items-center gap-4">
-          <SchedulerIndicator />
-          <div className="flex rounded-md border bg-muted p-0.5 text-xs" role="group" aria-label="Rol">
-            {(["pm", "dev"] as const).map((r) => (
-              <button
-                key={r}
-                onClick={() => setRol(r)}
-                className={cn(
-                  "rounded px-2.5 py-1 font-medium transition-colors",
-                  rol === r ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                {r === "pm" ? "Product Manager" : "Developer"}
-              </button>
-            ))}
-          </div>
-          <Button size="sm" onClick={() => run.mutate(undefined)} disabled={run.isPending || sched.data?.ruleazaAcum}>
-            <Play className="h-3.5 w-3.5" /> Verifică acum
-          </Button>
-        </div>
-      </div>
-      <nav className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4">
+    <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r bg-sidebar px-4 py-5 md:flex">
+      <Link to="/" className="mb-8 flex items-center gap-2 px-2 text-lg font-semibold tracking-tight">
+        <span className="grid h-8 w-8 place-items-center rounded-full bg-primary text-primary-foreground">
+          <ShieldCheck className="h-4 w-4" />
+        </span>
+        Verifix
+      </Link>
+      <nav className="flex flex-col gap-1">
         {NAV.map((n) => (
           <Link
             key={n.to}
             to={n.to}
             activeOptions={{ exact: n.to === "/" }}
-            className="border-b-2 border-transparent px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-            activeProps={{ className: "!border-primary !text-foreground font-medium" }}
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
+            activeProps={{ className: "!bg-sidebar-accent !text-sidebar-accent-foreground font-medium" }}
           >
+            <n.icon className="h-4 w-4" />
             {n.label}
           </Link>
         ))}
       </nav>
+      <div className="mt-auto">
+        <p className="mb-2 px-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">Rol</p>
+        <div className="grid grid-cols-2 rounded-lg border bg-muted p-0.5 text-xs" role="group" aria-label="Rol">
+          {(["pm", "dev"] as const).map((r) => (
+            <button
+              key={r}
+              onClick={() => setRol(r)}
+              className={cn(
+                "rounded-md px-2 py-1.5 font-medium transition-colors",
+                rol === r ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {r === "pm" ? "Product Manager" : "Developer"}
+            </button>
+          ))}
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+function TopBar() {
+  const run = useRunVerification();
+  const sched = useSchedulerStatus();
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  const curent = NAV.find((n) => n.to === path)?.label ?? "Verifix";
+  return (
+    <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b bg-background/90 px-6 backdrop-blur">
+      <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+        <span>Verifix</span>
+        <ChevronRight className="h-3.5 w-3.5" />
+        <span className="text-foreground">{curent}</span>
+      </div>
+      <div className="ml-auto flex items-center gap-3">
+        <SchedulerIndicator />
+        <Button onClick={() => run.mutate(undefined)} disabled={run.isPending || sched.data?.ruleazaAcum}>
+          <Play className="h-3.5 w-3.5" /> Verifică acum
+        </Button>
+      </div>
     </header>
+  );
+}
+
+export function AppShell({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex min-h-screen bg-background">
+      <Sidebar />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <TopBar />
+        <nav className="flex gap-1 overflow-x-auto border-b px-4 md:hidden">
+          {NAV.map((n) => (
+            <Link key={n.to} to={n.to} activeOptions={{ exact: n.to === "/" }} className="px-3 py-2 text-sm text-muted-foreground" activeProps={{ className: "!text-primary font-medium" }}>
+              {n.label}
+            </Link>
+          ))}
+        </nav>
+        <main className="mx-auto w-full max-w-7xl px-6 py-8">{children}</main>
+      </div>
+    </div>
   );
 }
 
 export function PageHeader({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
     <div className="mb-6">
-      <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
       {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
     </div>
   );
 }
 
 export function Placeholder({ text }: { text: string }) {
-  return <div className="rounded-lg border border-dashed bg-card p-10 text-center text-sm text-muted-foreground">{text}</div>;
+  return <div className="rounded-xl border border-dashed bg-card p-10 text-center text-sm text-muted-foreground">{text}</div>;
 }

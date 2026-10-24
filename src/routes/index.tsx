@@ -19,12 +19,12 @@ export const Route = createFileRoute("/")({
 
 function Kpi({ label, value, icon, tone }: { label: string; value?: number | undefined; icon: ReactNode; tone: string }) {
   return (
-    <div className="rounded-lg border bg-card p-4 shadow-sm">
+    <div className="rounded-xl border bg-card p-5">
       <div className="flex items-center justify-between text-sm text-muted-foreground">
         {label}
-        <span className={`grid h-8 w-8 place-items-center rounded-md ${tone}`}>{icon}</span>
+        <span className={`grid h-9 w-9 place-items-center rounded-full ${tone}`}>{icon}</span>
       </div>
-      <div className="mt-3 text-3xl font-semibold tabular-nums">
+      <div className="mt-4 text-4xl font-semibold tabular-nums">
         {value === undefined ? <Skeleton className="h-9 w-16" /> : value}
       </div>
     </div>

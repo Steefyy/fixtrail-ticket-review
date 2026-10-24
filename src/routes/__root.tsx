@@ -12,7 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { AppHeader } from "@/components/AppHeader";
+import { AppShell } from "@/components/AppHeader";
 import { RoleProvider } from "@/hooks/useRole";
 
 function NotFoundComponent() {
@@ -120,12 +120,9 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <RoleProvider>
-        <div className="min-h-screen bg-background">
-          <AppHeader />
-          <main className="mx-auto max-w-7xl px-4 py-8">
-            <Outlet />
-          </main>
-        </div>
+        <AppShell>
+          <Outlet />
+        </AppShell>
       </RoleProvider>
     </QueryClientProvider>
   );
