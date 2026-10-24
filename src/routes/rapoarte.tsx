@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader, Placeholder, RoleViewBanner } from "@/components/AppHeader";
+import { PageHeader, Placeholder } from "@/components/AppHeader";
 
 export const Route = createFileRoute("/rapoarte")({
   head: () => ({
@@ -15,7 +15,6 @@ export const Route = createFileRoute("/rapoarte")({
   component: () => (
     <>
       <PageHeader title="Rapoarte" subtitle="Ce a verificat agentul, pas cu pas." />
-      <RoleViewBanner />
       <Placeholder text="Secțiune în lucru." />
     </>
   ),

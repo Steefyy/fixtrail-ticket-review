@@ -1,6 +1,6 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { BadgeCheck, Play, LayoutDashboard, Ticket, FileText, Upload, Settings, ChevronRight, PanelLeftClose, PanelLeftOpen, BriefcaseBusiness, Code2 } from "lucide-react";
+import { BadgeCheck, Play, LayoutDashboard, Ticket, FileText, Upload, Settings, PanelLeftClose, PanelLeftOpen, BriefcaseBusiness, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRole } from "@/hooks/useRole";
 import { useRunVerification, useSchedulerStatus } from "@/hooks/useVerifix";
@@ -109,18 +109,11 @@ function Sidebar({ collapsed }: { collapsed: boolean }) {
 function TopBar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
   const run = useRunVerification();
   const sched = useSchedulerStatus();
-  const path = useRouterState({ select: (s) => s.location.pathname });
-  const curent = NAV.find((n) => n.to === path)?.label ?? "AfterCheck";
   return (
     <header className="sticky top-0 z-20 flex min-h-20 flex-wrap items-center gap-3 border-b border-border/60 bg-background/95 px-5 py-4 backdrop-blur sm:px-8">
       <Button variant="ghost" size="icon" onClick={onToggle} className="hidden shrink-0 text-muted-foreground md:inline-flex" aria-label={collapsed ? "Extinde meniul" : "Restrânge meniul"} title={collapsed ? "Extinde meniul" : "Restrânge meniul"}>
         {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
       </Button>
-      <div className="flex min-w-0 items-center gap-2 text-sm text-muted-foreground">
-        <span className="font-semibold text-foreground">AfterCheck</span>
-        <ChevronRight className="hidden h-3.5 w-3.5 sm:block" />
-        <span className="hidden font-medium text-foreground sm:inline">{curent}</span>
-      </div>
       <div className="ml-auto flex items-center gap-3">
         <SchedulerIndicator />
         <Button variant="premium" className="h-11 rounded-full px-5" onClick={() => run.mutate(undefined)} disabled={run.isPending || sched.data?.ruleazaAcum}>
@@ -156,20 +149,6 @@ export function PageHeader({ title, subtitle }: { title: string; subtitle?: stri
     <div className="mb-8">
       <h1 className="text-3xl font-semibold">{title}</h1>
       {subtitle && <p className="mt-2 text-sm leading-6 text-muted-foreground">{subtitle}</p>}
-    </div>
-  );
-}
-
-/** Tells the user which role's lens the current screen is showing. */
-export function RoleViewBanner() {
-  const { rol } = useRole();
-  const pm = rol === "pm";
-  return (
-    <div className={cn("mb-8 flex items-center gap-3 rounded-2xl border px-4 py-3 shadow-sm transition-colors duration-300", pm ? "tone-success" : "tone-info")}>
-      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-card/80">
-        {pm ? <BriefcaseBusiness className="h-4 w-4" /> : <Code2 className="h-4 w-4" />}
-      </span>
-      <p className="text-sm font-semibold">{pm ? "Vizualizare Product Manager" : "Vizualizare Developer"}</p>
     </div>
   );
 }

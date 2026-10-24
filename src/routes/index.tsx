@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, CheckCircle2, ChevronDown, Hand, Inbox, ListChecks, RotateCcw, Terminal } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { PieChart, Pie, Cell } from "recharts";
-import { PageHeader, RoleViewBanner } from "@/components/AppHeader";
+import { PageHeader } from "@/components/AppHeader";
 import { VerdictBadge } from "@/components/badges";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -255,8 +255,7 @@ function Index() {
   const dev = rol === "dev";
   return (
     <>
-      <PageHeader title="Prezentare generală" subtitle="Post-Release Inner Loop Intelligence & AI Testing Agent" />
-      <RoleViewBanner />
+      <PageHeader title="Prezentare generală" />
       {error && <p className="mb-4 text-sm text-destructive">{error.message}</p>}
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         {dev ? (
