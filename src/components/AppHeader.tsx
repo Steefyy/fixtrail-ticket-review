@@ -165,21 +165,11 @@ export function RoleViewBanner() {
   const { rol } = useRole();
   const pm = rol === "pm";
   return (
-    <div className={cn("mb-8 flex flex-wrap items-center gap-4 rounded-3xl border p-5 shadow-sm transition-colors duration-300", pm ? "tone-success" : "tone-info")}>
-      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-card/80 shadow-sm">
-        {pm ? <BriefcaseBusiness className="h-5 w-5" /> : <Code2 className="h-5 w-5" />}
+    <div className={cn("mb-8 flex items-center gap-3 rounded-2xl border px-4 py-3 shadow-sm transition-colors duration-300", pm ? "tone-success" : "tone-info")}>
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-card/80">
+        {pm ? <BriefcaseBusiness className="h-4 w-4" /> : <Code2 className="h-4 w-4" />}
       </span>
-      <div className="min-w-0">
-        <p className="text-sm font-semibold">{pm ? "Vizualizare Product Manager" : "Vizualizare Developer"}</p>
-        <p className="mt-1 text-xs leading-5 opacity-80">
-          {pm
-            ? "Eficacitatea lansării, impactul asupra clienților și sinteza executivă a fix-urilor."
-            : "Jurnalele agentului, erorile DOM și stack trace-urile pentru tichetele eșuate sau redeschise."}
-        </p>
-      </div>
-      <span className="ml-auto rounded-full bg-card/80 px-3 py-1.5 text-xs font-medium shadow-sm">
-        {pm ? "Volum de business, nu listă de lucru" : "Se numără doar tichetele pe care le poți prelua"}
-      </span>
+      <p className="text-sm font-semibold">{pm ? "Vizualizare Product Manager" : "Vizualizare Developer"}</p>
     </div>
   );
 }

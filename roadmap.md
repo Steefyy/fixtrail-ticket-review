@@ -11,3 +11,6 @@
 - [x] Product Manager view: business insights, release efficacy metrics, executive summary cards.
 - [x] Developer view: AI Testing Agent logs — step-by-step automation trace, DOM errors, stack traces for failed/zombie tickets.
 - [x] Verify both role views in the preview and run the tests.
+
+# Lean copy
+- [x] Remove repeated statements and long subtitles; keep a short, casual dashboard tone.

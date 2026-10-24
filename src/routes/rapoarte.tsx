@@ -14,9 +14,9 @@ export const Route = createFileRoute("/rapoarte")({
   }),
   component: () => (
     <>
-      <PageHeader title="Rapoarte" subtitle="Rapoartele AI Testing Agent." />
+      <PageHeader title="Rapoarte" subtitle="Ce a verificat agentul, pas cu pas." />
       <RoleViewBanner />
-      <Placeholder text="Conținutul acestei secțiuni urmează." />
+      <Placeholder text="Secțiune în lucru." />
     </>
   ),
 });

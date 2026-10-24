@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AlertTriangle, CheckCircle2, ChevronDown, Clock, Hand, Inbox, ListChecks, RotateCcw, Terminal } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ChevronDown, Hand, Inbox, ListChecks, RotateCcw, Terminal } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { PieChart, Pie, Cell } from "recharts";
 import { PageHeader, RoleViewBanner } from "@/components/AppHeader";
@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useRole } from "@/hooks/useRole";
 import { useReports, useStats, useTickets } from "@/hooks/useVerifix";
 import { cn } from "@/lib/utils";
-import type { Raport, Stats, Ticket } from "@/types";
+import type { Raport, Stats } from "@/types";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function Kpi({ label, value, icon, tone, helper }: { label: string; value?: number | undefined; icon: ReactNode; tone: string; helper?: string }) {
+function Kpi({ label, value, icon, tone }: { label: string; value?: number | undefined; icon: ReactNode; tone: string }) {
   return (
     <div className="group rounded-3xl border border-border/50 bg-card p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="flex min-h-14 items-start justify-between gap-3 text-sm font-medium leading-5 text-muted-foreground">
@@ -35,7 +35,6 @@ function Kpi({ label, value, icon, tone, helper }: { label: string; value?: numb
       <div className="mt-5 text-4xl font-extrabold tracking-tight tabular-nums text-ink">
         {value === undefined ? <Skeleton className="h-9 w-16" /> : value}
       </div>
-      {helper && <p className="mt-2 text-xs leading-5 text-muted-foreground">{helper}</p>}
     </div>
   );
 }
@@ -58,7 +57,7 @@ const donutConfig = {
 
 function DonutChart({ data }: { data: Stats | undefined }) {
   if (!data) return null;
-  const { fixuriConfirmate, fixuriInvalidate, necesitaVerificareManuala, totalTichete } = data;
+  const { fixuriConfirmate, fixuriInvalidate, necesitaVerificareManuala } = data;
   const chartData = [
     { name: donutConfig.confirmate.label, key: "confirmate", value: fixuriConfirmate, fill: "var(--t-success-fg)" },
     { name: donutConfig.invalidate.label, key: "invalidate", value: fixuriInvalidate, fill: "var(--t-danger-fg)" },
@@ -68,10 +67,7 @@ function DonutChart({ data }: { data: Stats | undefined }) {
   const pct = total === 0 ? 0 : Math.round((fixuriConfirmate / total) * 100);
   return (
     <div className="rounded-3xl border border-border/50 bg-card p-6 shadow-sm sm:p-8">
-      <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-base font-semibold">Distribuția fix-urilor verificate</h2>
-        <span className="rounded-full bg-muted px-3 py-1.5 text-xs tabular-nums text-muted-foreground">din {totalTichete} tichete</span>
-      </div>
+      <h2 className="mb-7 text-base font-semibold">Fixuri verificate</h2>
       <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
         <ChartContainer config={donutConfig} className="mx-auto aspect-square h-[280px] w-[280px] max-w-full">
           <PieChart>
@@ -119,11 +115,10 @@ function SintezaExecutiva({ data }: { data: Stats | undefined }) {
   return (
     <section className="mt-7 rounded-3xl border border-border/50 bg-card p-6 shadow-sm sm:p-8">
       <h2 className="text-base font-semibold">Sinteză executivă</h2>
-      <p className="mt-1 text-xs text-muted-foreground">Eficacitatea lansării curente și unde se concentrează nemulțumirile clienților.</p>
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
-        <Tile label="Eficacitatea fix-urilor" value={`${eficacitate}%`} helper={`${data.fixuriConfirmate} din ${verificate} fixuri verificate au trecut testul`} tone="tone-success" />
-        <Tile label="Rată redeschidere" value={`${Math.round(data.rataRedeschidere * 100)}%`} helper="fixuri invalidate de agent după lansare" tone="tone-ai" />
-        <Tile label="Tichete neluate" value={data.ticheteDisponibile} helper="niciun developer nu le-a preluat încă" tone="tone-warning" />
+        <Tile label="Eficacitatea fix-urilor" value={`${eficacitate}%`} helper="au trecut testul" tone="tone-success" />
+        <Tile label="Rată redeschidere" value={`${Math.round(data.rataRedeschidere * 100)}%`} helper="redeschise după fix" tone="tone-ai" />
+        <Tile label="Tichete neluate" value={data.ticheteDisponibile} helper="așteaptă pe cineva" tone="tone-warning" />
       </div>
       <ul className="mt-7 grid gap-3.5">
         {top.map((c) => (
@@ -156,10 +151,10 @@ function InsightsTehnice() {
   const zombie = (tichete ?? []).filter((t) => t.redeschisDeAgent).length;
   return (
     <div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <Tile label="Erori DOM prinse" value={erori} helper="în rulările eșuate ale agentului" tone="tone-danger" />
-      <Tile label="Stack trace-uri" value={stack} helper="aruncate din consola browserului" tone="tone-ai" />
-      <Tile label="Timp mediu / verificare" value={`${medie}s`} helper="cât durează o rulare completă" tone="tone-info" />
-      <Tile label="Tichete zombie" value={zombie} helper="redeschise de agent după fix" tone="tone-warning" />
+      <Tile label="Erori DOM" value={erori} helper="în rulările eșuate" tone="tone-danger" />
+      <Tile label="Stack trace-uri" value={stack} helper="din consola browserului" tone="tone-ai" />
+      <Tile label="Timp mediu / verificare" value={`${medie}s`} helper="pe rulare" tone="tone-info" />
+      <Tile label="Tichete zombie" value={zombie} helper="redeschise după fix" tone="tone-warning" />
     </div>
   );
 }
@@ -174,12 +169,7 @@ function JurnaleAgent() {
   return (
     <section className="mt-7 rounded-3xl border border-border/50 bg-card p-6 shadow-sm sm:p-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-base font-semibold">Jurnale Agent AI</h2>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Urma pas cu pas a automatizării, erorile DOM și stack trace-urile pentru tichetele eșuate sau redeschise.
-          </p>
-        </div>
+        <h2 className="text-base font-semibold">Jurnale Agent AI</h2>
         <span className="rounded-full bg-muted px-3 py-1.5 text-xs tabular-nums text-muted-foreground">{esuate.length} rulări eșuate</span>
       </div>
       <ul className="mt-6 grid gap-3">
@@ -199,7 +189,7 @@ function JurnaleAgent() {
                     {r.ticketId} · {titlu(r.ticketId)}
                   </span>
                   <span className="mt-0.5 block text-xs tabular-nums text-muted-foreground">
-                    v{r.versiuneTestata} · {r.durataSecunde}s · {r.pasi.length} pași · {r.id}
+                    v{r.versiuneTestata} · {r.durataSecunde}s · {r.pasi.length} pași
                   </span>
                 </span>
                 <ChevronDown className={cn("h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200", open && "rotate-180")} />
@@ -252,7 +242,7 @@ function DetaliiRulare({ raport }: { raport: Raport }) {
         </div>
       )}
       <div className="rounded-xl bg-muted/40 p-3 text-xs leading-5 text-muted-foreground">
-        <span className="font-semibold text-foreground">Explicația agentului: </span>
+        <span className="font-semibold text-foreground">De ce: </span>
         {raport.explicatieAI}
       </div>
     </div>
@@ -270,15 +260,9 @@ function Index() {
       {error && <p className="mb-4 text-sm text-destructive">{error.message}</p>}
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         {dev ? (
-          <Kpi
-            label="Tichete de preluat"
-            value={data?.ticheteDisponibile}
-            helper="nimeni nu le-a accesat încă — le poți rezolva"
-            icon={<Inbox className="h-5 w-5" />}
-            tone="tone-info"
-          />
+          <Kpi label="Tichete de preluat" value={data?.ticheteDisponibile} icon={<Inbox className="h-5 w-5" />} tone="tone-info" />
         ) : (
-          <Kpi label="Total tichete" value={data?.totalTichete} helper="în baza de date, indiferent de stadiu" icon={<ListChecks className="h-5 w-5" />} tone="tone-info" />
+          <Kpi label="Total tichete" value={data?.totalTichete} icon={<ListChecks className="h-5 w-5" />} tone="tone-info" />
         )}
         <Kpi label="Fix-uri confirmate" value={data?.fixuriConfirmate} icon={<CheckCircle2 className="h-5 w-5" />} tone="tone-success" />
         <Kpi label="Fix-uri invalidate de agent" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-5 w-5" />} tone="tone-ai" />
