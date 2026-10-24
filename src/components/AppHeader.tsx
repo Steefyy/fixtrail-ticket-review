@@ -92,7 +92,7 @@ function Sidebar({ collapsed }: { collapsed: boolean }) {
                 className={cn(
                   "flex h-10 min-w-0 cursor-pointer items-center justify-center gap-2 rounded-full border border-transparent px-2 text-[11px] font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   activ
-                    ? cn(r === "pm" ? "tone-success" : "tone-info", "font-semibold shadow-sm")
+                    ? cn(r === "pm" ? "tone-success" : "tone-info", "font-semibold shadow-action")
                     : "text-muted-foreground hover:text-foreground",
                 )}
               >
