@@ -23,4 +23,9 @@ describe("dateLabel", () => {
     expect(dataSimplaLabel("2026-08-17T23:30:00+03:00")).toBe("17.08.2026");
     expect(dataSimplaLabel(null)).toBe("—");
   });
+
+  it("shows a dash for missing values", () => {
+    expect(dateLabel(null)).toBe("—");
+    expect(dateLabel(undefined)).toBe("—");
+  });
 });
