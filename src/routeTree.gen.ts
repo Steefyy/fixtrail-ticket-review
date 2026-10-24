@@ -14,6 +14,7 @@ import { Route as ImportRouteImport } from './routes/import'
 import { Route as RapoarteRouteImport } from './routes/rapoarte'
 import { Route as SetariRouteImport } from './routes/setari'
 import { Route as TicheteRouteImport } from './routes/tichete'
+import { Route as RapoarteIdRouteImport } from './routes/rapoarte_.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const TicheteRoute = TicheteRouteImport.update({
   path: '/tichete',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RapoarteIdRoute = RapoarteIdRouteImport.update({
+  id: '/rapoarte_/$id',
+  path: '/rapoarte/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/rapoarte': typeof RapoarteRoute
   '/setari': typeof SetariRoute
   '/tichete': typeof TicheteRoute
+  '/rapoarte/$id': typeof RapoarteIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/rapoarte': typeof RapoarteRoute
   '/setari': typeof SetariRoute
   '/tichete': typeof TicheteRoute
+  '/rapoarte/$id': typeof RapoarteIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,22 @@ export interface FileRoutesById {
   '/rapoarte': typeof RapoarteRoute
   '/setari': typeof SetariRoute
   '/tichete': typeof TicheteRoute
+  '/rapoarte_/$id': typeof RapoarteIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/import' | '/rapoarte' | '/setari' | '/tichete'
+  fullPaths:
+    '/' | '/import' | '/rapoarte' | '/setari' | '/tichete' | '/rapoarte/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/import' | '/rapoarte' | '/setari' | '/tichete'
-  id: '__root__' | '/' | '/import' | '/rapoarte' | '/setari' | '/tichete'
+  to: '/' | '/import' | '/rapoarte' | '/setari' | '/tichete' | '/rapoarte/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/import'
+    | '/rapoarte'
+    | '/setari'
+    | '/tichete'
+    | '/rapoarte_/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +94,7 @@ export interface RootRouteChildren {
   RapoarteRoute: typeof RapoarteRoute
   SetariRoute: typeof SetariRoute
   TicheteRoute: typeof TicheteRoute
+  RapoarteIdRoute: typeof RapoarteIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +134,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TicheteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rapoarte_/$id': {
+      id: '/rapoarte_/$id'
+      path: '/rapoarte/$id'
+      fullPath: '/rapoarte/$id'
+      preLoaderRoute: typeof RapoarteIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +150,7 @@ const rootRouteChildren: RootRouteChildren = {
   RapoarteRoute: RapoarteRoute,
   SetariRoute: SetariRoute,
   TicheteRoute: TicheteRoute,
+  RapoarteIdRoute: RapoarteIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
