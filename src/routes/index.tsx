@@ -40,7 +40,7 @@ const donutConfig = {
   manuale: { label: "Necesită verificare manuală", color: "var(--t-info-fg)" },
 } satisfies ChartConfig;
 
-function DonutChart({ data }: { data?: Stats }) {
+function DonutChart({ data }: { data: Stats | undefined }) {
   if (!data) return null;
   const { fixuriConfirmate, fixuriInvalidate, necesitaVerificareManuala, totalTichete } = data;
   const chartData = [
