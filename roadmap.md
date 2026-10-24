@@ -29,6 +29,6 @@
 - [x] Verifică ordinea, verdictul unic, navigarea și ambele teme; verificări în previzualizare cu datele demonstrative disponibile.
 
 # Tichete simplificate
-- [ ] Căutare și panou unic de filtre, selecții în URL, chip-uri și trei filtre rapide.
-- [ ] Tabel compact și carduri pe mobil, cu aceleași detalii laterale.
-- [ ] Teste pentru filtrele rapide și verificarea interacțiunilor în ambele teme.
+- [x] Căutare și panou unic de filtre, selecții în URL, chip-uri și trei filtre rapide.
+- [x] Tabel compact și carduri pe mobil, cu aceleași detalii laterale.
+- [x] 28 de teste trec; filtre, reîncărcare URL, căutare fără rezultate și detalii verificate în ambele teme, cu datele demonstrative disponibile.
