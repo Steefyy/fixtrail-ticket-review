@@ -33,7 +33,7 @@ export const Route = createFileRoute("/tichete")({
 function TicketVerdictBadge({ ticket }: { ticket: Ticket }) {
   const verdict = ticketVerdict(ticket);
   const label = verdict === "trecut" ? "Fix confirmat" : verdict === "picat" ? "Fix invalidat" : verdict === "manual" ? "Verificare manuală" : "Neverificat";
-  return <Badge variant="outline" className={cn("w-fit whitespace-nowrap rounded-full border-transparent px-2.5 py-1 font-medium", verdict === "trecut" ? "tone-success" : verdict === "picat" ? "tone-danger" : verdict === "manual" ? "tone-info" : "tone-neutral")}>{label}</Badge>;
+  return <Badge variant="outline" className={cn("w-fit whitespace-nowrap rounded-full border-transparent px-2.5 py-1 font-medium", verdict === "trecut" ? "tone-success" : verdict === "picat" ? "tone-danger" : "tone-neutral")}>{label}</Badge>;
 }
 
 function TicketsPage() {

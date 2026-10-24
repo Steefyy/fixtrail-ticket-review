@@ -2,7 +2,7 @@ import type { PostReleaseImpact } from "@/types";
 
 export const impactConclusions = {
   fix_confirmat: { label: "Fix confirmat", tone: "tone-success", explanation: "Testul tehnic a trecut, iar reclamațiile au scăzut după release." },
-  necesita_monitorizare: { label: "Necesită monitorizare", tone: "tone-warning", explanation: "Testul tehnic a trecut, dar reclamațiile nu au scăzut suficient." },
+  necesita_monitorizare: { label: "Necesită monitorizare", tone: "tone-neutral text-foreground", explanation: "Testul tehnic a trecut, dar reclamațiile nu au scăzut suficient." },
   fix_invalidat: { label: "Fix invalidat", tone: "tone-danger", explanation: "Verificarea tehnică a picat, iar problema trebuie redeschisă." },
 } as const;
 

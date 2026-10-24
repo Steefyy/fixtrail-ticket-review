@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/AppHeader";
 import { VerdictBadge } from "@/components/badges";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePostReleaseImpacts, useReports } from "@/hooks/useVerifix";
-import { DemoImpactBadge, ImpactTrendBadge } from "@/components/PostReleaseImpact";
+import { ImpactTrendBadge } from "@/components/PostReleaseImpact";
 import { findLatestImpact } from "@/lib/postReleaseImpact";
 
 export const Route = createFileRoute("/rapoarte")({
@@ -48,7 +48,7 @@ function Rapoarte() {
                     <td className="p-3 font-mono text-xs">{r.ticketId}</td>
                     <td className="p-3 tabular-nums">v{r.versiuneTestata}</td>
                     <td className="p-3"><VerdictBadge verdict={r.verdict} /></td>
-                    <td className="p-3">{impacts.isPending ? <Skeleton className="h-6 w-28" /> : impact ? <div className="flex flex-col items-start gap-1"><ImpactTrendBadge impact={impact} complaints /><DemoImpactBadge /></div> : <span className="text-xs text-muted-foreground">{impacts.error ? "Indisponibil" : "Impactul post-release nu este încă disponibil."}</span>}</td>
+                    <td className="p-3">{impacts.isPending ? <Skeleton className="h-6 w-28" /> : impact ? <ImpactTrendBadge impact={impact} complaints /> : <span className="text-xs text-muted-foreground">{impacts.error ? "Indisponibil" : "Impactul post-release nu este încă disponibil."}</span>}</td>
                     <td className="p-3 text-muted-foreground">{picat ? `${picat.nr}. ${picat.actiune}` : "—"}</td>
                     <td className="p-3 tabular-nums">{r.durataSecunde}s</td>
                   </tr>

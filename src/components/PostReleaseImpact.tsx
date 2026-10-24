@@ -1,3 +1,4 @@
+import { Info } from "lucide-react";
 import { usePostReleaseImpacts } from "@/hooks/useVerifix";
 import { findLatestImpact, impactConclusions, impactTrend } from "@/lib/postReleaseImpact";
 import { cn } from "@/lib/utils";
@@ -5,14 +6,14 @@ import type { PostReleaseImpact } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-export function DemoImpactBadge() {
+function ImpactSourceInfo() {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <span tabIndex={0} className="tone-neutral inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium">Date demo</span>
+          <button type="button" aria-label="Sursa datelor" className="text-muted-foreground hover:text-foreground"><Info className="h-4 w-4" /></button>
         </TooltipTrigger>
-        <TooltipContent className="max-w-64">În producție, datele pot proveni din Zendesk, Intercom, App Store sau Google Play.</TooltipContent>
+        <TooltipContent className="max-w-64">Datele de feedback pot proveni din Zendesk, Intercom, App Store sau Google Play.</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
@@ -31,7 +32,7 @@ export function PostReleaseImpactCard({ ticketId, version }: { ticketId: string;
     <section aria-labelledby="impact-heading" className="mb-6 rounded-3xl border border-border/50 bg-card p-5 shadow-sm sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 id="impact-heading" className="font-semibold">Impact după release</h2>
-        {impact && <DemoImpactBadge />}
+        <ImpactSourceInfo />
       </div>
       {isPending ? <Skeleton className="mt-4 h-28 w-full rounded-xl" /> : error ? (
         <p role="status" className="mt-3 text-sm text-muted-foreground">Impactul post-release nu a putut fi încărcat.</p>
