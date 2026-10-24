@@ -31,10 +31,11 @@ export const Route = createFileRoute("/")({
 
 function Kpi({ label, value, icon, tone, footer }: { label: string; value?: number | string | undefined; icon: ReactNode; tone: string; footer?: ReactNode }) {
   return (
-    <div className="group rounded-3xl border border-border/50 bg-card p-4 shadow-sm transition-all sm:p-6 duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/60 bg-card p-6 shadow-sm transition-colors duration-300 hover:border-primary/40">
+      <span aria-hidden className="absolute inset-x-6 top-0 h-px bg-primary/0 transition-colors duration-300 group-hover:bg-primary/60" />
       <div className="flex min-h-14 flex-col-reverse items-start justify-between gap-2 sm:flex-row sm:gap-3 text-sm font-medium leading-5 text-muted-foreground">
-        <span className="max-w-[150px] pt-1">{label}</span>
-        <span className="grid h-9 w-9 shrink-0 sm:h-12 sm:w-12 place-items-center rounded-full bg-muted text-muted-foreground">{icon}</span>
+        <span className="max-w-[220px] pt-1">{label}</span>
+        <span className="grid h-9 w-9 shrink-0 sm:h-11 sm:w-11 place-items-center rounded-full border border-border/60 bg-muted/60 text-muted-foreground transition-colors group-hover:text-primary">{icon}</span>
       </div>
       <div className={cn("mt-5 text-3xl font-extrabold sm:text-4xl tabular-nums", tone)}>
         {value === undefined ? <Skeleton className="h-9 w-16" /> : value}
@@ -102,7 +103,7 @@ function SintezaExecutiva({ data }: { data: Stats | undefined }) {
   if (!data) return <Skeleton className="mt-7 h-72 w-full rounded-3xl" />;
   const eficacitate = procentConfirmate(data.fixuriConfirmate, data.fixuriInvalidate);
   return (
-    <section className="mt-8 border-t border-border/60 pt-6 sm:pt-8">
+    <section className="mt-12 border-t border-border/60 pt-8">
       <h2 className="text-base font-semibold">Sinteză executivă</h2>
       <div className="mt-5 grid items-center gap-6 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
         <dl className="grid grid-cols-2 gap-4">
@@ -136,7 +137,7 @@ function Prioritati() {
   };
   return (
     <TooltipProvider>
-      <section className="mt-8">
+      <section className="mt-12">
         <h2 className="text-base font-semibold">Priorități</h2>
         <ol className="mt-4 grid gap-3">
           {vizibile.map((c, i) => {
@@ -181,11 +182,11 @@ function Index() {
     <>
       <PageHeader title="Prezentare generală" />
       {error && <p className="mb-4 text-sm text-destructive">{error.message}</p>}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
         <Kpi label="Total tichete" value={data?.totalTichete} icon={<ListChecks className="h-5 w-5" />} tone="text-ink" />
         <Kpi label="Fix-uri confirmate" value={data?.fixuriConfirmate} icon={<CheckCircle2 className="h-5 w-5" />} tone="text-ink" />
-        <Kpi label="Fix-uri invalidate de agent" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-5 w-5" />} tone={data?.fixuriInvalidate ? "text-danger-ink" : "text-ink"} />
-        <Kpi label="Probleme reduse după release" value={impacts.isPending ? undefined : impacts.error || !impacts.data?.length ? "—" : countReducedProblems(impacts.data)} icon={<TrendingDown className="h-5 w-5" />} tone="text-ink" footer={impacts.error ? "Impactul post-release nu a putut fi încărcat." : impacts.data?.length ? undefined : impacts.isPending ? undefined : "Impactul post-release nu este încă disponibil."} />
+        <Kpi label="Fix-uri invalidate de agent" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-5 w-5" />} tone="text-ink" />
+        <Kpi label="Probleme reduse după release" value={impacts.isPending ? undefined : impacts.error || !impacts.data?.length ? "—" : countReducedProblems(impacts.data)} icon={<TrendingDown className="h-5 w-5" />} tone="text-ink" />
       </div>
       <Prioritati />
       <SintezaExecutiva data={data} />
