@@ -19,6 +19,6 @@
 - [x] "Verifică acum" button back, steps with 3 states + screenshots + lightbox, Priorități table, donut %, Setări, Import, Rapoarte + report page.
 
 # Pagina Tichete
-- [ ] Filtre în URL, scurtături numerice și tabel după prioritatea primită.
-- [ ] Detalii laterale, tichete asociate și verificare individuală.
-- [ ] Verifică filtrele, navigarea, stările și testele.
+- [x] Filtre în URL, scurtături numerice și tabel după prioritatea primită.
+- [x] Detalii laterale, tichete asociate și verificare individuală.
+- [x] Verifică filtrele, navigarea și testele; verificarea individuală a fost exercitată în modul demonstrativ disponibil în sandbox, nu pe serverul extern.
