@@ -25,8 +25,8 @@ function parsePasi(text: string): { pasi: string[]; asteptat: string | null } {
     if (!t) continue;
     const asteptatMatch = /^Rezultat așteptat\s*:\s*(.+)$/i.exec(t);
     const numerotat = /^\d+[.)]\s*(.+)$/.exec(t);
-    if (asteptatMatch) asteptat = asteptatMatch[1];
-    else if (numerotat) pasi.push(numerotat[1]);
+    if (asteptatMatch) asteptat = asteptatMatch[1] ?? null;
+    else if (numerotat) pasi.push(numerotat[1] ?? t);
     else pasi.push(t);
   }
   return { pasi, asteptat };
