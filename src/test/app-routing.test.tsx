@@ -14,4 +14,16 @@ describe("App routing", () => {
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
+
+  it("has no settings page left to open", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    let matches;
+    try {
+      matches = router.matchRoutes("/setari");
+    } catch {
+      return; // unknown path: no settings route exists
+    }
+    expect(matches.at(-1)?.routeId).toBe(rootRouteId);
+  });
 });
