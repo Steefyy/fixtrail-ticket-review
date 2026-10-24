@@ -2,13 +2,13 @@ import { necesitaVerificareManuala } from "@/lib/priority";
 import type { Ticket } from "@/types";
 
 export interface TicketFilters {
-  q?: string;
-  status?: string[];
-  severitate?: string[];
-  categorie?: string;
-  verdict?: string;
-  testabil?: boolean;
-  redeschisDeAgent?: boolean;
+  q?: string | undefined;
+  status?: string[] | undefined;
+  severitate?: string[] | undefined;
+  categorie?: string | undefined;
+  verdict?: string | undefined;
+  testabil?: boolean | undefined;
+  redeschisDeAgent?: boolean | undefined;
 }
 
 const list = (v: unknown): string[] | undefined => {
@@ -20,9 +20,9 @@ const flag = (v: unknown) => v === true || v === "true" || v === "1" ? true : un
 
 export function parseTicketFilters(search: Record<string, unknown>): TicketFilters {
   return {
-    q: text(search.q), status: list(search.status), severitate: list(search.severitate),
-    categorie: text(search.categorie), verdict: text(search.verdict),
-    testabil: flag(search.testabil), redeschisDeAgent: flag(search.redeschisDeAgent ?? search.redeschise),
+    q: text(search['q']), status: list(search['status']), severitate: list(search['severitate']),
+    categorie: text(search['categorie']), verdict: text(search['verdict']),
+    testabil: flag(search['testabil']), redeschisDeAgent: flag(search['redeschisDeAgent'] ?? search['redeschise']),
   };
 }
 
