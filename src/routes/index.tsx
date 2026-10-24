@@ -24,12 +24,12 @@ export const Route = createFileRoute("/")({
 
 function Kpi({ label, value, icon, tone }: { label: string; value?: number | undefined; icon: ReactNode; tone: string }) {
   return (
-    <div className="group rounded-3xl border border-border/50 bg-card p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+    <div className="group rounded-3xl border border-border/50 bg-card p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="flex min-h-14 items-start justify-between gap-3 text-sm font-medium leading-5 text-muted-foreground">
         <span className="max-w-[150px] pt-1">{label}</span>
         <span className={`icon-glow grid h-12 w-12 shrink-0 place-items-center rounded-full transition-transform duration-200 group-hover:scale-105 ${tone}`}>{icon}</span>
       </div>
-      <div className="mt-5 text-4xl font-semibold tabular-nums">
+      <div className="mt-5 text-4xl font-extrabold tracking-tight tabular-nums text-ink">
         {value === undefined ? <Skeleton className="h-9 w-16" /> : value}
       </div>
     </div>
@@ -72,7 +72,7 @@ function DonutChart({ data }: { data: Stats | undefined }) {
               y="46%"
               textAnchor="middle"
               dominantBaseline="middle"
-              className="fill-foreground text-4xl font-semibold tabular-nums"
+              className="fill-ink text-4xl font-extrabold tabular-nums"
             >
               {pct}%
             </text>
@@ -86,7 +86,7 @@ function DonutChart({ data }: { data: Stats | undefined }) {
             <li key={entry.key} className="flex items-center gap-3 py-5">
               <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: entry.fill }} />
               <span className="text-sm text-muted-foreground">{entry.name}</span>
-              <span className="ml-auto text-xl font-semibold tabular-nums">{entry.value}</span>
+              <span className="ml-auto text-xl font-bold tabular-nums text-ink">{entry.value}</span>
             </li>
           ))}
         </ul>

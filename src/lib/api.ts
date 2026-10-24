@@ -3,7 +3,7 @@ import { STATUSURI } from "@/types";
 import { buildClusters, createMockState, rerank } from "./mockData";
 import { necesitaVerificareManuala } from "./priority";
 
-export interface VerifixApi {
+export interface AfterCheckApi {
   getTickets(): Promise<Ticket[]>;
   getTicket(id: string): Promise<Ticket>;
   getClusters(): Promise<Cluster[]>;
@@ -42,7 +42,7 @@ export function computeStats(tickets: Ticket[]): Stats {
 
 const delay = <T,>(v: T) => new Promise<T>((r) => setTimeout(() => r(structuredClone(v)), 300));
 
-export function createMockApi(): VerifixApi {
+export function createMockApi(): AfterCheckApi {
   const st = createMockState();
   const status = (): SchedulerStatus => ({
     ruleazaAcum: st.ruleazaAcum,
@@ -95,7 +95,7 @@ export function createMockApi(): VerifixApi {
   };
 }
 
-export function createHttpApi(base: string): VerifixApi {
+export function createHttpApi(base: string): AfterCheckApi {
   const req = async <T,>(path: string, init?: RequestInit): Promise<T> => {
     const res = await fetch(base + path, init);
     if (!res.ok) throw new Error(`Eroare API ${res.status}: ${await res.text().catch(() => "")}`);
@@ -122,6 +122,6 @@ export function createHttpApi(base: string): VerifixApi {
 }
 
 const useMock = (import.meta.env["VITE_USE_MOCK"] ?? "true") !== "false";
-export const api: VerifixApi = useMock
+export const api: AfterCheckApi = useMock
   ? createMockApi()
   : createHttpApi(import.meta.env["VITE_API_URL"] ?? "http://localhost:8000");
