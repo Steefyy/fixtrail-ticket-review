@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "@/components/AppHeader";
 import { RoleProvider } from "@/hooks/useRole";
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -113,6 +114,7 @@ function RootComponent() {
         <AppShell>
           <Outlet />
         </AppShell>
+        <Toaster richColors position="bottom-right" />
       </RoleProvider>
     </QueryClientProvider>
   );
