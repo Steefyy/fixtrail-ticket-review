@@ -21,7 +21,8 @@ function ImpactSourceInfo() {
 
 export function ImpactTrendBadge({ impact, complaints = false }: { impact: PostReleaseImpact; complaints?: boolean }) {
   const trend = impactTrend(impact, complaints);
-  return <span className={cn("inline-flex rounded-full px-2.5 py-1 text-xs font-medium tabular-nums", trend.tone)}>{trend.label}</span>;
+  if (!trend.arrow) return <span className="text-sm tabular-nums text-muted-foreground">{trend.label}</span>;
+  return <span className="text-sm tabular-nums text-foreground"><span aria-hidden="true" className={cn("font-semibold", trend.tone)}>{trend.arrow}</span> {trend.label}</span>;
 }
 
 export function PostReleaseImpactCard({ ticketId, version }: { ticketId: string; version: string }) {

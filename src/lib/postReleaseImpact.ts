@@ -7,11 +7,12 @@ export const impactConclusions = {
 } as const;
 
 export function impactTrend(impact: PostReleaseImpact, complaints = false) {
-  if (impact.trend === "stabil") return { label: "Fără schimbare", tone: "tone-neutral" };
+  if (impact.trend === "stabil") return { arrow: "", label: "Fără schimbare", tone: "text-muted-foreground" };
   const percentage = Math.abs(impact.schimbareProcent).toLocaleString("ro-RO", { maximumFractionDigits: 1 });
   return {
-    label: `${impact.trend === "scadere" ? "↓" : "↑"} ${percentage}%${complaints ? " reclamații" : ""}`,
-    tone: impact.trend === "scadere" ? "tone-success" : "tone-danger",
+    arrow: impact.trend === "scadere" ? "↓" : "↑",
+    label: `${percentage}%${complaints ? " reclamații" : ""}`,
+    tone: impact.trend === "scadere" ? "text-success-ink" : "text-danger-ink",
   };
 }
 

@@ -31,7 +31,7 @@ function RaportPage() {
       <Link to="/rapoarte" className="mb-4 inline-block text-sm text-muted-foreground hover:text-foreground">← Rapoarte</Link>
       <PageHeader title={`Raport ${r.id}`} subtitle={`${r.ticketId} · v${r.versiuneTestata} · ${new Date(r.data).toLocaleString("ro-RO")} · ${r.durataSecunde}s`} />
       <div className="mb-6 flex flex-wrap items-center gap-4 rounded-3xl border border-border/50 bg-card p-6 shadow-sm">
-        <span className="scale-125 origin-left"><VerdictBadge verdict={r.verdict} /></span>
+        <span className="scale-125 origin-left"><VerdictBadge verdict={r.verdict} emphasis /></span>
         <span className="ml-6 flex items-center gap-2 text-sm"><StatusBadge status={r.statusInainte} /><ArrowRight className="h-4 w-4 text-muted-foreground" /><StatusBadge status={r.statusDupa} /></span>
       </div>
       <div className="mb-6 rounded-3xl border border-border/50 bg-card p-6 shadow-sm">
