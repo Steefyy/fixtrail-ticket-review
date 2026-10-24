@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## Project rules
+- Post-release impact presentation shares browser-safe trend, conclusion, count and ticket/version matching helpers; all reads use the existing API adapter and query hooks, so failures never block technical reports.
 - The application is frontend-only; all data goes through `src/lib/api.ts` (`AfterCheckApi` with mock + http impls, chosen by VITE_USE_MOCK) — the real backend is an external FastAPI server.
 - All server data is read via TanStack Query hooks in `src/hooks/useVerifix.ts`; never fetch directly in components.
 - The frontend renders a single dashboard perspective without role context; the root clears obsolete preferences through a tested browser-safe migration, while API compatibility fields and report diagnostics remain unchanged.

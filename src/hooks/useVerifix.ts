@@ -4,6 +4,7 @@ import { api } from "@/lib/api";
 export const useTickets = () => useQuery({ queryKey: ["tickets"], queryFn: api.getTickets });
 export const useTicket = (id: string) => useQuery({ queryKey: ["tickets", id], queryFn: () => api.getTicket(id) });
 export const useStats = () => useQuery({ queryKey: ["stats"], queryFn: api.getStats });
+export const usePostReleaseImpacts = () => useQuery({ queryKey: ["post-release-impact"], queryFn: api.getPostReleaseImpacts });
 export const useClusters = () => useQuery({ queryKey: ["clusters"], queryFn: api.getClusters });
 export const useReports = (ticketId?: string) =>
   useQuery({ queryKey: ["reports", ticketId ?? "all"], queryFn: () => api.getReports(ticketId) });

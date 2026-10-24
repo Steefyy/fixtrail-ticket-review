@@ -1,9 +1,10 @@
-import type { Cluster, ImportResult, Raport, SchedulerStatus, Stats, Status, Ticket } from "@/types";
+import type { Cluster, ImportResult, PostReleaseImpact, Raport, SchedulerStatus, Stats, Status, Ticket } from "@/types";
 import { STATUSURI } from "@/types";
 import { buildClusters, createMockState, rerank } from "./mockData";
 import { necesitaVerificareManuala, poatePrelua } from "./priority";
 
 export interface AfterCheckApi {
+  getPostReleaseImpacts(): Promise<PostReleaseImpact[]>;
   getTickets(): Promise<Ticket[]>;
   getTicket(id: string): Promise<Ticket>;
   getClusters(): Promise<Cluster[]>;
@@ -57,6 +58,7 @@ export function createMockApi(): AfterCheckApi {
     return t;
   };
   return {
+    getPostReleaseImpacts: () => delay(st.impacts),
     getTickets: () => delay(st.tickets),
     getTicket: async (id) => delay(find(id)),
     getClusters: () => delay(buildClusters(st.tickets)),
@@ -91,6 +93,7 @@ export function createMockApi(): AfterCheckApi {
       const rezultat = { ticheteSterse: st.tickets.length, rapoarteSterse: st.reports.length };
       st.tickets = [];
       st.reports = [];
+      st.impacts = [];
       return delay(rezultat);
     },
   };
@@ -104,6 +107,7 @@ export function createHttpApi(base: string): AfterCheckApi {
   };
   const json = (method: string, body: unknown): RequestInit => ({ method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
   return {
+    getPostReleaseImpacts: () => req("/api/post-release-impact"),
     getTickets: () => req("/api/tickets"),
     getTicket: (id) => req(`/api/tickets/${encodeURIComponent(id)}`),
     getClusters: () => req("/api/clusters"),
