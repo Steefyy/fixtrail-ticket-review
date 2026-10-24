@@ -6,7 +6,7 @@ const base = "inline-flex items-center gap-1 rounded-full border border-transpar
 const STATUS_CLS: Record<Status, string> = {
   Nou: "tone-neutral",
   "În lucru": "tone-neutral",
-  "Rezolvat – fix livrat": "tone-success",
+  "Rezolvat – fix livrat": "tone-neutral",
   "Închis – nu se reproduce": "tone-neutral",
 };
 export function StatusBadge({ status }: { status: Status }) {
@@ -14,7 +14,7 @@ export function StatusBadge({ status }: { status: Status }) {
 }
 
 const SEV_CLS: Record<Severitate, string> = {
-  Critică: "tone-danger",
+  Critică: "tone-neutral",
   Mare: "tone-neutral",
   Medie: "tone-neutral",
   Mică: "tone-neutral",
@@ -32,9 +32,9 @@ export function SeveritateBadge({ severitate, sursa }: { severitate: Severitate 
   );
 }
 
-export function VerdictBadge({ verdict }: { verdict: Verdict | "manual" }) {
+export function VerdictBadge({ verdict, emphasis = false }: { verdict: Verdict | "manual"; emphasis?: boolean }) {
   const map = {
-    trecut: ["tone-success", "✓ Trecut"],
+    trecut: [emphasis ? "tone-success" : "tone-neutral", "✓ Trecut"],
     picat: ["tone-danger", "✗ Picat"],
     eroare: ["tone-neutral", "Eroare"],
     manual: ["tone-neutral", "Verificare manuală"],

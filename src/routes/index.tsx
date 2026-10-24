@@ -130,7 +130,7 @@ function Prioritati() {
   const vizibile = [...clustere].sort(comparaClustere).slice(0, 5);
   const verdicturi = {
     picat: { label: "Fix invalidat", tone: "tone-danger" },
-    trecut: { label: "Fix confirmat", tone: "tone-success" },
+    trecut: { label: "Fix confirmat", tone: "tone-neutral" },
     manual: { label: "Verificare manuală", tone: "tone-neutral" },
     neverificat: { label: "Neverificat", tone: "tone-neutral" },
   };
@@ -183,9 +183,9 @@ function Index() {
       {error && <p className="mb-4 text-sm text-destructive">{error.message}</p>}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
         <Kpi label="Total tichete" value={data?.totalTichete} icon={<ListChecks className="h-5 w-5" />} tone="text-ink" />
-        <Kpi label="Fix-uri confirmate" value={data?.fixuriConfirmate} icon={<CheckCircle2 className="h-5 w-5" />} tone="text-success-ink" />
-        <Kpi label="Fix-uri invalidate de agent" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-5 w-5" />} tone="text-danger-ink" />
-        <Kpi label="Probleme reduse după release" value={impacts.isPending ? undefined : impacts.error || !impacts.data?.length ? "—" : countReducedProblems(impacts.data)} icon={<TrendingDown className="h-5 w-5" />} tone="text-success-ink" footer={impacts.error ? "Impactul post-release nu a putut fi încărcat." : impacts.data?.length ? undefined : impacts.isPending ? undefined : "Impactul post-release nu este încă disponibil."} />
+        <Kpi label="Fix-uri confirmate" value={data?.fixuriConfirmate} icon={<CheckCircle2 className="h-5 w-5" />} tone="text-ink" />
+        <Kpi label="Fix-uri invalidate de agent" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-5 w-5" />} tone={data?.fixuriInvalidate ? "text-danger-ink" : "text-ink"} />
+        <Kpi label="Probleme reduse după release" value={impacts.isPending ? undefined : impacts.error || !impacts.data?.length ? "—" : countReducedProblems(impacts.data)} icon={<TrendingDown className="h-5 w-5" />} tone="text-ink" footer={impacts.error ? "Impactul post-release nu a putut fi încărcat." : impacts.data?.length ? undefined : impacts.isPending ? undefined : "Impactul post-release nu este încă disponibil."} />
       </div>
       <Prioritati />
       <SintezaExecutiva data={data} />

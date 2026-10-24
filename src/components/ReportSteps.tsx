@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import type { PasRaport, Raport } from "@/types";
 
 const REZ = {
-  ok: ["tone-success", "OK"],
+  ok: ["tone-neutral", "OK"],
   picat: ["tone-danger", "PICAT"],
   neexecutat: ["tone-neutral", "NEEXECUTAT"],
 } as const;
