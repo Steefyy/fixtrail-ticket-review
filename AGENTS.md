@@ -12,6 +12,7 @@
 ## Project rules
 - The application is frontend-only; all data goes through `src/lib/api.ts` (`AfterCheckApi` with mock + http impls, chosen by VITE_USE_MOCK) — the real backend is an external FastAPI server.
 - All server data is read via TanStack Query hooks in `src/hooks/useVerifix.ts`; never fetch directly in components.
+- The frontend renders a single dashboard perspective without role context; the root clears obsolete preferences through a tested browser-safe migration, while API compatibility fields and report diagnostics remain unchanged.
 - Routing uses TanStack Router file routes (react-router is not supported in this stack).
 - Badge colors come from `tone-*` utilities in `src/styles.css`.
 - Shared surfaces, shadows, icon glows, and action gradients use semantic tokens in `src/styles.css`; gradient actions use the shared Button premium variant to keep presentation consistent.

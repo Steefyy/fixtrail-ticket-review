@@ -2,9 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { BadgeCheck, Loader2, PlayCircle, LayoutDashboard, Ticket, FileText, Upload, Settings, PanelLeftClose, PanelLeftOpen, BriefcaseBusiness, Code2, Sun, Moon } from "lucide-react";
+import { BadgeCheck, Loader2, PlayCircle, LayoutDashboard, Ticket, FileText, Upload, Settings, PanelLeftClose, PanelLeftOpen, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useRole } from "@/hooks/useRole";
 import { useTheme } from "@/hooks/useTheme";
 import { useRunVerification, useSchedulerStatus } from "@/hooks/useVerifix";
 import { cn } from "@/lib/utils";
@@ -75,7 +74,6 @@ function VerifyButton() {
 }
 
 function Sidebar({ collapsed }: { collapsed: boolean }) {
-  const { rol, setRol } = useRole();
   return (
     <aside className={cn("sticky top-0 hidden h-screen shrink-0 flex-col border-r border-sidebar-border/70 bg-sidebar py-8 transition-[width] duration-200 md:flex", collapsed ? "w-20 px-3" : "w-[264px] px-5")}>
       <Link to="/" aria-label="AfterCheck" className={cn("mb-10 flex items-center gap-2.5 text-xl font-semibold", collapsed ? "justify-center" : "px-2")}>
@@ -100,33 +98,6 @@ function Sidebar({ collapsed }: { collapsed: boolean }) {
           </Link>
         ))}
       </nav>
-      <div className="mt-auto border-t border-sidebar-border/70 pt-6">
-        {!collapsed && <p className="mb-3 px-2 text-xs font-medium text-muted-foreground">Rol</p>}
-        <div className={cn("grid rounded-full border border-border/60 bg-muted/70 p-1 text-xs", collapsed ? "grid-cols-1 gap-1" : "grid-cols-2 gap-1")} role="group" aria-label="Rol">
-          {(["pm", "dev"] as const).map((r) => {
-            const activ = rol === r;
-            const nume = r === "pm" ? "Product Manager" : "Developer";
-            return (
-              <button
-                key={r}
-                type="button"
-                aria-pressed={activ}
-                aria-label={nume}
-                title={collapsed ? nume : undefined}
-                onClick={() => setRol(r)}
-                className={cn(
-                  "flex h-10 min-w-0 cursor-pointer items-center justify-center gap-2 rounded-full border border-transparent px-2 text-[11px] font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  activ
-                    ? cn(r === "pm" ? "tone-success" : "tone-info", "font-semibold shadow-action")
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                {collapsed ? (r === "pm" ? <BriefcaseBusiness className="h-4 w-4" /> : <Code2 className="h-4 w-4" />) : nume}
-              </button>
-            );
-          })}
-        </div>
-      </div>
     </aside>
   );
 }
