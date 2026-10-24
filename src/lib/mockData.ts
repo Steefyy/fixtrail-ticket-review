@@ -1,4 +1,4 @@
-import type { Cluster, Raport, Severitate, Status, Ticket } from "@/types";
+import type { Cluster, PostReleaseImpact, Raport, Severitate, Status, Ticket } from "@/types";
 import { SEVERITATE_RANG } from "@/types";
 import { comparaPrioritate } from "./priority";
 
@@ -182,6 +182,7 @@ function buildReports(): Raport[] {
 export interface MockState {
   tickets: Ticket[];
   reports: Raport[];
+  impacts: PostReleaseImpact[];
   settings: { versiuneLive: string; intervalMinute: number; wizzBeesUrl: string };
   ultimaRulare: string | null;
   ruleazaAcum: boolean;
@@ -191,8 +192,22 @@ export function createMockState(): MockState {
   return {
     tickets: build(),
     reports: buildReports(),
+    impacts: buildPostReleaseImpacts(),
     settings: { versiuneLive: "3.14.0", intervalMinute: 2, wizzBeesUrl: "http://localhost:5173" },
     ultimaRulare: new Date(Date.now() - 60000).toISOString(),
     ruleazaAcum: false,
   };
+}
+
+function buildPostReleaseImpacts(): PostReleaseImpact[] {
+  const rows: Pick<PostReleaseImpact, "ticketId" | "reclamatiiInainte" | "reclamatiiDupa" | "schimbareProcent" | "trend" | "concluzie">[] = [
+    { ticketId: "WB-1016", reclamatiiInainte: 100, reclamatiiDupa: 22, schimbareProcent: -78, trend: "scadere", concluzie: "fix_confirmat" },
+    { ticketId: "WB-1029", reclamatiiInainte: 40, reclamatiiDupa: 10, schimbareProcent: -75, trend: "scadere", concluzie: "fix_confirmat" },
+    { ticketId: "WB-1008", reclamatiiInainte: 30, reclamatiiDupa: 30, schimbareProcent: 0, trend: "stabil", concluzie: "necesita_monitorizare" },
+    { ticketId: "WB-1027", reclamatiiInainte: 100, reclamatiiDupa: 125, schimbareProcent: 25, trend: "crestere", concluzie: "fix_invalidat" },
+    { ticketId: "WB-1022", reclamatiiInainte: 40, reclamatiiDupa: 50, schimbareProcent: 25, trend: "crestere", concluzie: "fix_invalidat" },
+    { ticketId: "WB-1036", reclamatiiInainte: 100, reclamatiiDupa: 140, schimbareProcent: 40, trend: "crestere", concluzie: "fix_invalidat" },
+    { ticketId: "WB-1021", reclamatiiInainte: 80, reclamatiiDupa: 80, schimbareProcent: 0, trend: "stabil", concluzie: "necesita_monitorizare" },
+  ];
+  return rows.map((row) => ({ ...row, versiune: "3.14.0", dataRelease: "2026-10-16", zileAnalizate: 7, sursa: "date_demo" }));
 }

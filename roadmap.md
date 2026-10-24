@@ -1,4 +1,7 @@
 # AfterCheck rebranding
+- [x] Impact după release: contract, șapte exemple demo, hook și invalidare.
+- [x] Card în raport, coloană în listă și un KPI în prezentarea generală, cu stări independente.
+- [x] Teste și verificare în previzualizare cu date demo: scădere, stabil, creștere și finalizare verificare; fără modificări backend. Serverul extern nu a fost verificat.
 - [x] Replace user-facing branding and page metadata; add the requested subtitle.
 - [x] Refine premium surfaces and brand colors while preserving all functionality.
 - [x] Verify branding across every page, roles, verification, and compact layouts.

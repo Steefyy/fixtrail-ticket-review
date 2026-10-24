@@ -5,6 +5,7 @@ import { StatusBadge, VerdictBadge } from "@/components/badges";
 import { EroriTehnice, PasiRaport } from "@/components/ReportSteps";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useReport } from "@/hooks/useVerifix";
+import { PostReleaseImpactCard } from "@/components/PostReleaseImpact";
 
 export const Route = createFileRoute("/rapoarte_/$id")({
   head: ({ params }) => ({
@@ -37,6 +38,7 @@ function RaportPage() {
         <h2 className="mb-2 font-semibold">Explicația AI</h2>
         <p className="text-sm leading-6 text-muted-foreground">{r.explicatieAI}</p>
       </div>
+      <PostReleaseImpactCard ticketId={r.ticketId} version={r.versiuneTestata} />
       <div className="mb-6 rounded-3xl border border-border/50 bg-card p-6 shadow-sm">
         <h2 className="mb-4 font-semibold">Pași</h2>
         <PasiRaport pasi={r.pasi} />

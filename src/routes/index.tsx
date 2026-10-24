@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, Hand, ListChecks, RotateCcw } from "lucide-react";
+import { ArrowRight, CheckCircle2, Hand, ListChecks, RotateCcw, TrendingDown } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { PieChart, Pie, Cell } from "recharts";
 import { PageHeader } from "@/components/AppHeader";
@@ -10,7 +10,9 @@ import { Button } from "@/components/ui/button";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { TicketDetails } from "@/components/TicketDetails";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useClusters, useStats, useTickets } from "@/hooks/useVerifix";
+import { useClusters, usePostReleaseImpacts, useStats, useTickets } from "@/hooks/useVerifix";
+import { countReducedProblems } from "@/lib/postReleaseImpact";
+import { DemoImpactBadge } from "@/components/PostReleaseImpact";
 import { cn } from "@/lib/utils";
 import type { Stats } from "@/types";
 
@@ -28,7 +30,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function Kpi({ label, value, icon, tone }: { label: string; value?: number | undefined; icon: ReactNode; tone: string }) {
+function Kpi({ label, value, icon, tone, footer }: { label: string; value?: number | string | undefined; icon: ReactNode; tone: string; footer?: ReactNode }) {
   return (
     <div className="group rounded-3xl border border-border/50 bg-card p-4 shadow-sm transition-all sm:p-6 duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
       <div className="flex min-h-14 flex-col-reverse items-start justify-between gap-2 sm:flex-row sm:gap-3 text-sm font-medium leading-5 text-muted-foreground">
@@ -38,6 +40,7 @@ function Kpi({ label, value, icon, tone }: { label: string; value?: number | und
       <div className="mt-5 text-3xl font-extrabold sm:text-4xl tabular-nums text-ink">
         {value === undefined ? <Skeleton className="h-9 w-16" /> : value}
       </div>
+      {footer && <div className="mt-3 text-xs leading-5 text-muted-foreground">{footer}</div>}
     </div>
   );
 }
@@ -176,15 +179,17 @@ function Prioritati() {
 
 function Index() {
   const { data, error } = useStats();
+  const impacts = usePostReleaseImpacts();
   return (
     <>
       <PageHeader title="Prezentare generală" />
       {error && <p className="mb-4 text-sm text-destructive">{error.message}</p>}
-      <div className="grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-5">
         <Kpi label="Total tichete" value={data?.totalTichete} icon={<ListChecks className="h-5 w-5" />} tone="tone-info" />
         <Kpi label="Fix-uri confirmate" value={data?.fixuriConfirmate} icon={<CheckCircle2 className="h-5 w-5" />} tone="tone-success" />
         <Kpi label="Fix-uri invalidate de agent" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-5 w-5" />} tone="tone-ai" />
         <Kpi label="Necesită verificare manuală" value={data?.necesitaVerificareManuala} icon={<Hand className="h-5 w-5" />} tone="tone-warning" />
+        <Kpi label="Probleme reduse după release" value={impacts.isPending ? undefined : impacts.error || !impacts.data?.length ? "—" : countReducedProblems(impacts.data)} icon={<TrendingDown className="h-5 w-5" />} tone="tone-success" footer={impacts.error ? "Impactul post-release nu a putut fi încărcat." : impacts.data?.length ? <DemoImpactBadge /> : impacts.isPending ? undefined : "Impactul post-release nu este încă disponibil."} />
       </div>
       <Prioritati />
       <SintezaExecutiva data={data} />

@@ -2,6 +2,19 @@ export type Severitate = "Critică" | "Mare" | "Medie" | "Mică";
 export type Status = "Nou" | "În lucru" | "Rezolvat – fix livrat" | "Închis – nu se reproduce";
 export type Verdict = "trecut" | "picat" | "eroare";
 
+export type PostReleaseImpact = {
+  ticketId: string;
+  versiune: string;
+  dataRelease: string;
+  zileAnalizate: number;
+  reclamatiiInainte: number;
+  reclamatiiDupa: number;
+  schimbareProcent: number;
+  trend: "scadere" | "crestere" | "stabil";
+  concluzie: "fix_confirmat" | "necesita_monitorizare" | "fix_invalidat";
+  sursa: "date_demo";
+};
+
 export const STATUSURI: Status[] = ["Nou", "În lucru", "Rezolvat – fix livrat", "Închis – nu se reproduce"];
 export const SEVERITATE_RANG: Record<Severitate, number> = { Critică: 1, Mare: 2, Medie: 3, Mică: 4 };
 
