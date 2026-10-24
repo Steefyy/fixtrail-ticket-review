@@ -57,7 +57,7 @@ export function PasiRaport({ pasi }: { pasi: PasRaport[] }) {
                 {p.durataMs != null && <span className="tabular-nums text-muted-foreground">{p.durataMs} ms</span>}
                 {picat && p.screenshotUrl && (
                   <button type="button" onClick={() => open(p.screenshotUrl!)} className="mt-2 w-full">
-                    <img src={p.screenshotUrl} alt={`Pasul ${p.nr}`} className="max-h-[520px] w-full rounded-xl object-cover object-top" />
+                    <img src={p.screenshotUrl} alt={`Pasul ${p.nr}`} className="block w-full rounded-xl object-contain" />
                   </button>
                 )}
                 {p.detalii && (

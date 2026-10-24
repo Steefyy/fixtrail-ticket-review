@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Loader2, PlayCircle } from "lucide-react";
 import { toast } from "sonner";
-import { formatDistanceToNow, format } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { ro } from "date-fns/locale";
 import { SeveritateBadge, StatusBadge, VerdictBadge } from "@/components/badges";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useRunVerification, useSchedulerStatus } from "@/hooks/useVerifix";
 import { ticketVerdict, verificationDisabledReason } from "@/lib/ticketFilters";
+import { dateLabel } from "@/lib/dates";
 import type { Cluster, Ticket } from "@/types";
 
 export function TicketVerification({ ticket }: { ticket: Ticket }) {
@@ -22,11 +23,6 @@ export function TicketVerification({ ticket }: { ticket: Ticket }) {
 function relativeTime(iso: string) {
   const date = new Date(iso);
   return Number.isNaN(date.getTime()) ? "—" : formatDistanceToNow(date, { addSuffix: true, locale: ro });
-}
-function dateLabel(iso: string | null) {
-  if (!iso) return "—";
-  const date = new Date(iso);
-  return Number.isNaN(date.getTime()) ? "—" : format(date, "dd.MM.yyyy HH:mm", { locale: ro });
 }
 
 export function TicketDetails({ ticket, tickets, clusters, onSelect, onClose }: {
