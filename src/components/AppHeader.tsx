@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { BadgeCheck, Loader2, PlayCircle, LayoutDashboard, Ticket, FileText, Upload, Settings, Sun, Moon } from "lucide-react";
+import { BadgeCheck, Loader2, PlayCircle, LayoutDashboard, Ticket, FileText, Upload, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 import { useRunVerification, useSchedulerStatus } from "@/hooks/useVerifix";
@@ -13,7 +13,6 @@ const NAV = [
   { to: "/tichete", label: "Tichete", icon: Ticket },
   { to: "/rapoarte", label: "Rapoarte", icon: FileText },
   { to: "/import", label: "Import", icon: Upload },
-  { to: "/setari", label: "Setări", icon: Settings },
 ] as const;
 
 function relativ(iso: string | null, now: number, viitor: boolean) {

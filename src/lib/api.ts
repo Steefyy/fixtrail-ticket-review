@@ -1,4 +1,4 @@
-import type { Cluster, ImportResult, Raport, SchedulerStatus, Settings, Stats, Status, Ticket } from "@/types";
+import type { Cluster, ImportResult, Raport, SchedulerStatus, Stats, Status, Ticket } from "@/types";
 import { STATUSURI } from "@/types";
 import { buildClusters, createMockState, rerank } from "./mockData";
 import { necesitaVerificareManuala, poatePrelua } from "./priority";
@@ -13,8 +13,6 @@ export interface AfterCheckApi {
   importExcel(file: File): Promise<ImportResult>;
   runVerification(ticketIds?: string[]): Promise<SchedulerStatus>;
   getSchedulerStatus(): Promise<SchedulerStatus>;
-  getSettings(): Promise<Settings>;
-  updateSettings(s: Settings): Promise<Settings>;
 }
 
 export function computeStats(tickets: Ticket[]): Stats {
@@ -88,11 +86,6 @@ export function createMockApi(): AfterCheckApi {
       return delay(status());
     },
     getSchedulerStatus: () => delay(status()),
-    getSettings: () => delay(st.settings),
-    updateSettings: async (s) => {
-      st.settings = { ...s };
-      return delay(st.settings);
-    },
   };
 }
 
@@ -117,8 +110,6 @@ export function createHttpApi(base: string): AfterCheckApi {
     },
     runVerification: (ticketIds) => req("/api/verify/run", json("POST", { ticketIds })),
     getSchedulerStatus: () => req("/api/verify/status"),
-    getSettings: () => req("/api/settings"),
-    updateSettings: (s) => req("/api/settings", json("PUT", s)),
   };
 }
 
