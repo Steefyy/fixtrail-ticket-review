@@ -169,7 +169,7 @@ function Prioritati() {
         {vizibile.length === 0 && <p className="py-6 text-sm text-muted-foreground">Nicio prioritate de afișat.</p>}
         <Button asChild variant="link" className="mt-3 px-0"><Link to="/tichete">Vezi toate prioritățile <ArrowRight /></Link></Button>
       </section>
-      <TicketDetails ticket={tichete.find((t) => t.id === selectat)} tickets={tichete} clusters={clustere} onSelect={setSelectat} onClose={() => setSelectat(null)} />
+      <TicketDetails ticket={tichete.find((t) => t.id === selectat)} onClose={() => setSelectat(null)} />
     </TooltipProvider>
   );
 }
