@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { BadgeCheck, Play, LayoutDashboard, Ticket, FileText, Upload, Settings, PanelLeftClose, PanelLeftOpen, BriefcaseBusiness, Code2 } from "lucide-react";
+import { BadgeCheck, Play, LayoutDashboard, Ticket, FileText, Upload, Settings, PanelLeftClose, PanelLeftOpen, BriefcaseBusiness, Code2, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRole } from "@/hooks/useRole";
+import { useTheme } from "@/hooks/useTheme";
 import { useRunVerification, useSchedulerStatus } from "@/hooks/useVerifix";
 import { cn } from "@/lib/utils";
 
@@ -109,12 +110,17 @@ function Sidebar({ collapsed }: { collapsed: boolean }) {
 function TopBar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
   const run = useRunVerification();
   const sched = useSchedulerStatus();
+  const { tema, comuta } = useTheme();
+  const etichetaTema = tema === "dark" ? "Fundal alb" : "Fundal negru";
   return (
     <header className="sticky top-0 z-20 flex min-h-20 flex-wrap items-center gap-3 border-b border-border/60 bg-background/95 px-5 py-4 backdrop-blur sm:px-8">
       <Button variant="ghost" size="icon" onClick={onToggle} className="hidden shrink-0 text-muted-foreground md:inline-flex" aria-label={collapsed ? "Extinde meniul" : "Restrânge meniul"} title={collapsed ? "Extinde meniul" : "Restrânge meniul"}>
         {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
       </Button>
       <div className="ml-auto flex items-center gap-3">
+        <Button variant="ghost" size="icon" onClick={comuta} className="shrink-0 text-muted-foreground" aria-label={etichetaTema} title={etichetaTema}>
+          {tema === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+        </Button>
         <SchedulerIndicator />
         <Button variant="premium" className="h-11 rounded-full px-5" onClick={() => run.mutate(undefined)} disabled={run.isPending || sched.data?.ruleazaAcum}>
           <Play className="h-3.5 w-3.5" /> Verifică acum
