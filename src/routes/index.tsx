@@ -47,7 +47,7 @@ function Kpi({ label, value, icon, tone, footer }: { label: string; value?: numb
 const donutConfig = {
   confirmate: { label: "Fix-uri confirmate", color: "var(--t-success-fg)" },
   invalidate: { label: "Fix-uri invalidate", color: "var(--t-danger-fg)" },
-  manuale: { label: "Necesită verificare manuală", color: "var(--t-info-fg)" },
+  manuale: { label: "Necesită verificare manuală", color: "var(--muted-foreground)" },
 } satisfies ChartConfig;
 
 function DonutChart({ data }: { data: Stats | undefined }) {
@@ -56,7 +56,7 @@ function DonutChart({ data }: { data: Stats | undefined }) {
   const chartData = [
     { name: donutConfig.confirmate.label, key: "confirmate", value: fixuriConfirmate, fill: "var(--t-success-fg)" },
     { name: donutConfig.invalidate.label, key: "invalidate", value: fixuriInvalidate, fill: "var(--t-danger-fg)" },
-    { name: donutConfig.manuale.label, key: "manuale", value: necesitaVerificareManuala, fill: "var(--t-info-fg)" },
+    { name: donutConfig.manuale.label, key: "manuale", value: necesitaVerificareManuala, fill: "var(--muted-foreground)" },
   ];
   const pct = procentConfirmate(fixuriConfirmate, fixuriInvalidate);
   return (

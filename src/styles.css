@@ -67,6 +67,8 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-ink: var(--ink);
+  --color-success-ink: var(--t-success-fg);
+  --color-danger-ink: var(--t-danger-fg);
 }
 
 /* Dark-only theme (Linear/Vercel inspired). :root and .dark stay in sync. */
