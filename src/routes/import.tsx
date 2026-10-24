@@ -8,6 +8,8 @@ export const Route = createFileRoute("/import")({
       { name: "description", content: "Importă tichete din Excel în Verifix." },
       { property: "og:title", content: "Import · Verifix" },
       { property: "og:description", content: "Importă tichete din Excel în Verifix." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: () => (
