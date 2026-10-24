@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { BadgeCheck, Loader2, PlayCircle, LayoutDashboard, Ticket, FileText, Upload, Settings, PanelLeftClose, PanelLeftOpen, Sun, Moon } from "lucide-react";
+import { BadgeCheck, Loader2, PlayCircle, LayoutDashboard, Ticket, FileText, Upload, Settings, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 import { useRunVerification, useSchedulerStatus } from "@/hooks/useVerifix";
@@ -73,14 +73,14 @@ function VerifyButton() {
   );
 }
 
-function Sidebar({ collapsed }: { collapsed: boolean }) {
+function Sidebar() {
   return (
-    <aside className={cn("sticky top-0 hidden h-screen shrink-0 flex-col border-r border-sidebar-border/70 bg-sidebar py-8 transition-[width] duration-200 md:flex", collapsed ? "w-20 px-3" : "w-[264px] px-5")}>
-      <Link to="/" aria-label="AfterCheck" className={cn("mb-10 flex items-center gap-2.5 text-xl font-semibold", collapsed ? "justify-center" : "px-2")}>
+    <aside className="sticky top-0 hidden h-screen w-[264px] shrink-0 flex-col border-r border-sidebar-border/70 bg-sidebar px-5 py-8 md:flex">
+      <Link to="/" aria-label="AfterCheck" className="mb-10 flex items-center gap-2.5 px-2 text-xl font-semibold">
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-action">
           <BadgeCheck className="h-6 w-6" />
         </span>
-        {!collapsed && "AfterCheck"}
+        AfterCheck
       </Link>
       <nav className="flex flex-col gap-1">
         {NAV.map((n) => (
@@ -88,13 +88,12 @@ function Sidebar({ collapsed }: { collapsed: boolean }) {
             key={n.to}
             to={n.to}
             activeOptions={{ exact: n.to === "/" }}
-            title={collapsed ? n.label : undefined}
             aria-label={n.label}
-            className={cn("flex h-12 items-center gap-3 rounded-2xl text-sm text-muted-foreground transition-all hover:bg-sidebar-accent/60 hover:text-sidebar-foreground", collapsed ? "justify-center" : "px-4")}
+            className="flex h-12 items-center gap-3 rounded-2xl px-4 text-sm text-muted-foreground transition-all hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
             activeProps={{ className: "bg-sidebar-accent text-sidebar-accent-foreground font-semibold" }}
           >
             <n.icon className="h-[18px] w-[18px] shrink-0" />
-            {!collapsed && n.label}
+            {n.label}
           </Link>
         ))}
       </nav>
@@ -102,14 +101,11 @@ function Sidebar({ collapsed }: { collapsed: boolean }) {
   );
 }
 
-function TopBar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
+function TopBar() {
   const { tema, comuta } = useTheme();
   const etichetaTema = tema === "dark" ? "Fundal alb" : "Fundal negru";
   return (
     <header className="sticky top-0 z-20 flex min-h-20 flex-wrap items-center gap-3 border-b border-border/60 bg-background/95 px-5 py-4 backdrop-blur sm:px-8">
-      <Button variant="ghost" size="icon" onClick={onToggle} className="hidden shrink-0 text-muted-foreground md:inline-flex" aria-label={collapsed ? "Extinde meniul" : "Restrânge meniul"} title={collapsed ? "Extinde meniul" : "Restrânge meniul"}>
-        {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
-      </Button>
       <div className="ml-auto flex items-center gap-3">
         <Button variant="ghost" size="icon" onClick={comuta} className="shrink-0 text-muted-foreground" aria-label={etichetaTema} title={etichetaTema}>
           {tema === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -122,12 +118,11 @@ function TopBar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => v
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const [collapsed, setCollapsed] = useState(false);
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar collapsed={collapsed} />
+      <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <TopBar collapsed={collapsed} onToggle={() => setCollapsed((value) => !value)} />
+        <TopBar />
         <nav className="flex gap-1 overflow-x-auto border-b border-border/60 px-4 py-2 md:hidden">
           {NAV.map((n) => (
             <Link key={n.to} to={n.to} activeOptions={{ exact: n.to === "/" }} className="shrink-0 rounded-full px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent" activeProps={{ className: "bg-accent text-accent-foreground font-medium" }}>
