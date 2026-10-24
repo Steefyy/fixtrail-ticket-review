@@ -14,3 +14,6 @@
 
 # Lean copy
 - [x] Remove repeated statements and long subtitles; keep a short, casual dashboard tone.
+
+# Real backend corrections
+- [x] "Verifică acum" button back, steps with 3 states + screenshots + lightbox, Priorități table, donut %, Setări, Import, Rapoarte + report page.

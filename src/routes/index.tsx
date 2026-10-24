@@ -235,7 +235,7 @@ function Prioritati() {
         <table className="w-full min-w-[760px] text-sm">
           <thead className="text-left text-xs text-muted-foreground">
             <tr>
-              <th className="w-10 py-2 pl-4 font-medium">#</th><th className="py-2 font-medium">Problemă</th><th className="py-2 font-medium">Severitate</th>
+              <th className="w-10 py-2 pl-4 font-medium">#</th><th className="py-2 font-medium">Problemă</th><th className="py-2 pr-4 font-medium">Severitate</th>
               <th className="py-2 font-medium">Raportări</th><th className="py-2 font-medium">Ultima verificare</th><th className="py-2 pr-2 font-medium">Status</th>
             </tr>
           </thead>
@@ -255,7 +255,7 @@ function Prioritati() {
                       <div className="flex items-center gap-2 font-medium"><ChevronDown className={cn("h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform", open && "rotate-180")} />{c.titlu}</div>
                       <div className="ml-5 mt-0.5 text-xs text-muted-foreground">{c.ticketIds.join(", ")}</div>
                     </td>
-                    <td className="py-3"><SeveritateBadge severitate={c.severitateMax} sursa={ai ? "llm" : "excel"} /></td>
+                    <td className="py-3 pr-4"><SeveritateBadge severitate={c.severitateMax} sursa={ai ? "llm" : "excel"} /></td>
                     <td className="py-3 pr-4">
                       <div className="flex items-center gap-2"><span className="w-10 tabular-nums">{c.totalRaportari}</span>
                         <div className="h-1.5 w-24 rounded-full bg-muted"><div className="h-1.5 rounded-full bg-primary" style={{ width: `${Math.max(4, (c.totalRaportari / max) * 100)}%` }} /></div></div>
