@@ -5,6 +5,7 @@ import { PieChart, Pie, Cell } from "recharts";
 import { PageHeader } from "@/components/AppHeader";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { Stats } from "@/types";
 import { useStats } from "@/hooks/useVerifix";
 
 export const Route = createFileRoute("/")({
