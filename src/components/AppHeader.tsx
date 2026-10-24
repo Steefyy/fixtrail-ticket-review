@@ -178,7 +178,7 @@ export function RoleViewBanner() {
         </p>
       </div>
       <span className="ml-auto rounded-full bg-card/80 px-3 py-1.5 text-xs font-medium shadow-sm">
-        {pm ? "Volum de business, nu listă de lucru" : "Only tickets you can take are counted"}
+        {pm ? "Volum de business, nu listă de lucru" : "Se numără doar tichetele pe care le poți prelua"}
       </span>
     </div>
   );
