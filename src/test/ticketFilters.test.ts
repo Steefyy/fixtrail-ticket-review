@@ -55,4 +55,8 @@ describe("filtre tichete", () => {
     expect(verificationDisabledReason({ ...base, status: "Nou", testabil: true })).toBeDefined();
     expect(verificationDisabledReason({ ...base, status: "Rezolvat – fix livrat", testabil: false })).toBeDefined();
   });
+  it("badge-ul Filtre numără doar status, severitate și categorie", () => {
+    expect(advancedFilterCount({})).toBe(0);
+    expect(advancedFilterCount({ status: ["Nou"], severitate: ["Mare"], categorie: "Plăți", verdict: "picat", rapid: "atentie", q: "x" })).toBe(3);
+  });
 });

@@ -47,6 +47,10 @@ export function filterTickets(tickets: Ticket[], f: TicketFilters): Ticket[] {
   ).sort((a, b) => a.prioritate - b.prioritate);
 }
 
+export function advancedFilterCount(f: TicketFilters): number {
+  return (f.status?.length ? 1 : 0) + (f.severitate?.length ? 1 : 0) + (f.categorie ? 1 : 0);
+}
+
 export function verificationDisabledReason(t: Ticket): string | undefined {
   if (t.status !== "Rezolvat – fix livrat") return "Verificarea este disponibilă după livrarea fixului.";
   if (!t.testabil) return "Acest tichet necesită verificare manuală.";
