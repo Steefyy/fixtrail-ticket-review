@@ -4,10 +4,10 @@ import { PageHeader, Placeholder } from "@/components/AppHeader";
 export const Route = createFileRoute("/import")({
   head: () => ({
     meta: [
-      { title: "Import · Verifix" },
-      { name: "description", content: "Importă tichete din Excel în Verifix." },
-      { property: "og:title", content: "Import · Verifix" },
-      { property: "og:description", content: "Importă tichete din Excel în Verifix." },
+      { title: "Import · AfterCheck" },
+      { name: "description", content: "Importă tichete din Excel în AfterCheck." },
+      { property: "og:title", content: "Import · AfterCheck" },
+      { property: "og:description", content: "Importă tichete din Excel în AfterCheck." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

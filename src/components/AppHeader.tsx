@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { ShieldCheck, Play, LayoutDashboard, Ticket, FileText, Upload, Settings, ChevronRight, PanelLeftClose, PanelLeftOpen, BriefcaseBusiness, Code2 } from "lucide-react";
+import { BadgeCheck, Play, LayoutDashboard, Ticket, FileText, Upload, Settings, ChevronRight, PanelLeftClose, PanelLeftOpen, BriefcaseBusiness, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRole } from "@/hooks/useRole";
 import { useRunVerification, useSchedulerStatus } from "@/hooks/useVerifix";
@@ -51,11 +51,11 @@ function Sidebar({ collapsed }: { collapsed: boolean }) {
   const { rol, setRol } = useRole();
   return (
     <aside className={cn("sticky top-0 hidden h-screen shrink-0 flex-col border-r border-sidebar-border/70 bg-sidebar py-8 transition-[width] duration-200 md:flex", collapsed ? "w-20 px-3" : "w-[264px] px-5")}>
-      <Link to="/" aria-label="Verifix" className={cn("mb-10 flex items-center gap-3 text-2xl font-semibold", collapsed ? "justify-center" : "px-3")}>
+      <Link to="/" aria-label="AfterCheck" className={cn("mb-10 flex items-center gap-2.5 text-xl font-semibold", collapsed ? "justify-center" : "px-2")}>
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-action">
-          <ShieldCheck className="h-5 w-5" />
+          <BadgeCheck className="h-6 w-6" />
         </span>
-        {!collapsed && "Verifix"}
+        {!collapsed && "AfterCheck"}
       </Link>
       <nav className="flex flex-col gap-1">
         {NAV.map((n) => (
@@ -102,16 +102,16 @@ function TopBar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => v
   const run = useRunVerification();
   const sched = useSchedulerStatus();
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const curent = NAV.find((n) => n.to === path)?.label ?? "Verifix";
+  const curent = NAV.find((n) => n.to === path)?.label ?? "AfterCheck";
   return (
     <header className="sticky top-0 z-20 flex min-h-20 flex-wrap items-center gap-3 border-b border-border/60 bg-background/95 px-5 py-4 backdrop-blur sm:px-8">
       <Button variant="ghost" size="icon" onClick={onToggle} className="hidden shrink-0 text-muted-foreground md:inline-flex" aria-label={collapsed ? "Extinde meniul" : "Restrânge meniul"} title={collapsed ? "Extinde meniul" : "Restrânge meniul"}>
         {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
       </Button>
       <div className="flex min-w-0 items-center gap-2 text-sm text-muted-foreground">
-        <span className="hidden sm:inline">Verifix</span>
+        <span className="font-semibold text-foreground">AfterCheck</span>
         <ChevronRight className="hidden h-3.5 w-3.5 sm:block" />
-        <span className="font-medium text-foreground">{curent}</span>
+        <span className="hidden font-medium text-foreground sm:inline">{curent}</span>
       </div>
       <div className="ml-auto flex items-center gap-3">
         <SchedulerIndicator />
