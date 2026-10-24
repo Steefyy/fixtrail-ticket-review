@@ -1,15 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { AlertTriangle, CheckCircle2, ChevronDown, Hand, Inbox, ListChecks, RotateCcw, Terminal } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { CheckCircle2, ChevronDown, Hand, Inbox, ListChecks, RotateCcw } from "lucide-react";
+import { Fragment, useState, type ReactNode } from "react";
 import { PieChart, Pie, Cell } from "recharts";
 import { PageHeader } from "@/components/AppHeader";
-import { VerdictBadge } from "@/components/badges";
+import { SeveritateBadge, StatusBadge, VerdictBadge } from "@/components/badges";
+import { EroriTehnice, PasiRaport } from "@/components/ReportSteps";
+import { comparaClustere, procentConfirmate, verificareCluster } from "@/lib/priority";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRole } from "@/hooks/useRole";
-import { useReports, useStats, useTickets } from "@/hooks/useVerifix";
+import { useClusters, useReports, useStats, useTickets } from "@/hooks/useVerifix";
 import { cn } from "@/lib/utils";
-import type { Raport, Stats } from "@/types";
+import type { Cluster, Raport, Stats } from "@/types";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -63,8 +65,7 @@ function DonutChart({ data }: { data: Stats | undefined }) {
     { name: donutConfig.invalidate.label, key: "invalidate", value: fixuriInvalidate, fill: "var(--t-danger-fg)" },
     { name: donutConfig.manuale.label, key: "manuale", value: necesitaVerificareManuala, fill: "var(--t-info-fg)" },
   ];
-  const total = fixuriConfirmate + fixuriInvalidate + necesitaVerificareManuala;
-  const pct = total === 0 ? 0 : Math.round((fixuriConfirmate / total) * 100);
+  const pct = procentConfirmate(fixuriConfirmate, fixuriInvalidate);
   return (
     <div className="rounded-3xl border border-border/50 bg-card p-6 shadow-sm sm:p-8">
       <h2 className="mb-7 text-base font-semibold">Fixuri verificate</h2>
@@ -87,7 +88,7 @@ function DonutChart({ data }: { data: Stats | undefined }) {
               {pct}%
             </text>
             <text x="50%" y="58%" textAnchor="middle" dominantBaseline="middle" className="fill-muted-foreground text-xs">
-              confirmate
+              din fix-urile testate
             </text>
           </PieChart>
         </ChartContainer>
@@ -206,46 +207,82 @@ function JurnaleAgent() {
 function DetaliiRulare({ raport }: { raport: Raport }) {
   return (
     <div className="grid gap-3.5 border-t border-border/60 p-4 sm:p-5">
-      <ol className="grid gap-2">
-        {raport.pasi.map((p) => (
-          <li key={p.nr} className="flex flex-wrap items-center gap-2 rounded-xl bg-muted/40 px-3 py-2.5 text-xs">
-            <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-semibold", p.rezultat === "ok" ? "tone-success" : "tone-danger")}>
-              {p.rezultat === "ok" ? "OK" : "PICAT"}
-            </span>
-            <span className="font-medium">
-              {p.nr}. {p.actiune}
-            </span>
-            {p.selector && <code className="rounded bg-card px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground">{p.selector}</code>}
-            {p.durataMs !== undefined && <span className="tabular-nums text-muted-foreground">{p.durataMs} ms</span>}
-            {p.detalii && <span className="w-full text-muted-foreground">{p.detalii}</span>}
-          </li>
-        ))}
-      </ol>
-      {!!raport.eroriDom?.length && (
-        <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-3">
-          <p className="mb-2 flex items-center gap-2 text-xs font-semibold text-destructive">
-            <AlertTriangle className="h-3.5 w-3.5" /> Erori DOM
-          </p>
-          <ul className="grid gap-1 font-mono text-[11px] leading-5 text-destructive">
-            {raport.eroriDom.map((e) => (
-              <li key={e}>{e}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-      {raport.stackTrace && (
-        <div className="overflow-x-auto rounded-xl border border-border/60 bg-muted/60 p-3">
-          <p className="mb-2 flex items-center gap-2 text-xs font-semibold">
-            <Terminal className="h-3.5 w-3.5" /> Stack trace
-          </p>
-          <pre className="whitespace-pre font-mono text-[11px] leading-5">{raport.stackTrace}</pre>
-        </div>
-      )}
+      <PasiRaport pasi={raport.pasi} />
+      <EroriTehnice raport={raport} />
       <div className="rounded-xl bg-muted/40 p-3 text-xs leading-5 text-muted-foreground">
         <span className="font-semibold text-foreground">De ce: </span>
         {raport.explicatieAI}
       </div>
+      <Link to="/rapoarte/$id" params={{ id: raport.id }} className="text-xs font-semibold text-primary hover:underline">Deschide raportul →</Link>
     </div>
+  );
+}
+
+function Prioritati() {
+  const { data: clustere } = useClusters();
+  const { data: tichete } = useTickets();
+  const [toate, setToate] = useState(false);
+  const [deschis, setDeschis] = useState<string | null>(null);
+  if (!clustere || !tichete) return <Skeleton className="mt-7 h-96 w-full rounded-3xl" />;
+  const lista = [...clustere].sort(comparaClustere);
+  const vizibile = toate ? lista : lista.slice(0, 8);
+  const max = Math.max(1, ...lista.map((c) => c.totalRaportari));
+  const ale = (c: Cluster) => tichete.filter((t) => c.ticketIds.includes(t.id));
+  return (
+    <section className="mt-7 rounded-3xl border border-border/50 bg-card p-6 shadow-sm sm:p-8">
+      <h2 className="text-base font-semibold">Priorități</h2>
+      <div className="mt-5 overflow-x-auto">
+        <table className="w-full min-w-[760px] text-sm">
+          <thead className="text-left text-xs text-muted-foreground">
+            <tr>
+              <th className="w-10 py-2 pl-4 font-medium">#</th><th className="py-2 font-medium">Problemă</th><th className="py-2 font-medium">Severitate</th>
+              <th className="py-2 font-medium">Raportări</th><th className="py-2 font-medium">Ultima verificare</th><th className="py-2 pr-2 font-medium">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vizibile.map((c, i) => {
+              const ts = ale(c);
+              const v = verificareCluster(ts);
+              const zombie = ts.some((t) => t.redeschisDeAgent);
+              const ai = ts.some((t) => t.severitateSursa === "llm");
+              const open = deschis === c.id;
+              const statusuri = [...new Set(ts.map((t) => t.status))];
+              return (
+                <Fragment key={c.id}>
+                  <tr onClick={() => setDeschis(open ? null : c.id)} className={cn("cursor-pointer border-t border-border/60 transition-colors hover:bg-muted/40", zombie && "shadow-[inset_3px_0_0_var(--destructive)]")}>
+                    <td className="py-3 pl-4 tabular-nums text-muted-foreground">{i + 1}</td>
+                    <td className="py-3 pr-4">
+                      <div className="flex items-center gap-2 font-medium"><ChevronDown className={cn("h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform", open && "rotate-180")} />{c.titlu}</div>
+                      <div className="ml-5 mt-0.5 text-xs text-muted-foreground">{c.ticketIds.join(", ")}</div>
+                    </td>
+                    <td className="py-3"><SeveritateBadge severitate={c.severitateMax} sursa={ai ? "llm" : "excel"} /></td>
+                    <td className="py-3 pr-4">
+                      <div className="flex items-center gap-2"><span className="w-10 tabular-nums">{c.totalRaportari}</span>
+                        <div className="h-1.5 w-24 rounded-full bg-muted"><div className="h-1.5 rounded-full bg-primary" style={{ width: `${Math.max(4, (c.totalRaportari / max) * 100)}%` }} /></div></div>
+                    </td>
+                    <td className="py-3">{v ? <VerdictBadge verdict={v === "manual" ? "manual" : v} /> : <span className="text-muted-foreground">—</span>}</td>
+                    <td className="py-3 pr-2"><div className="flex flex-wrap gap-1">{statusuri.map((s) => <StatusBadge key={s} status={s} />)}</div></td>
+                  </tr>
+                  {open && ts.map((t) => (
+                    <tr key={t.id} className="bg-muted/30 text-xs">
+                      <td />
+                      <td className="py-2 pr-4 pl-5"><span className="font-mono text-muted-foreground">{t.id}</span> · {t.titlu}</td>
+                      <td className="py-2"><SeveritateBadge severitate={t.severitate} sursa={t.severitateSursa} /></td>
+                      <td className="py-2 tabular-nums">{t.nrRaportari}</td>
+                      <td className="py-2">{t.ultimaVerificare ? <VerdictBadge verdict={t.ultimaVerificare.verdict} /> : "—"}</td>
+                      <td className="py-2 pr-2"><StatusBadge status={t.status} /></td>
+                    </tr>
+                  ))}
+                </Fragment>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      {lista.length > 8 && (
+        <button type="button" onClick={() => setToate(!toate)} className="mt-4 text-sm font-semibold text-primary hover:underline">{toate ? "Arată mai puține" : `Vezi toate (${lista.length})`}</button>
+      )}
+    </section>
   );
 }
 
@@ -274,6 +311,7 @@ function Index() {
         </>
       ) : (
         <>
+          <Prioritati />
           <SintezaExecutiva data={data} />
           <div className="mt-7">
             <DonutChart data={data} />
