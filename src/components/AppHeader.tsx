@@ -45,6 +45,7 @@ function SchedulerIndicator() {
           </span>
         )}
       </div>
+    </div>
   );
 }
 
