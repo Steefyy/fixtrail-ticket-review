@@ -14,9 +14,9 @@ export const Route = createFileRoute("/tichete")({
   }),
   component: () => (
     <>
-      <PageHeader title="Tichete" subtitle="Lista prioritizată a tichetelor." />
+      <PageHeader title="Tichete" subtitle="Ordonate după severitate." />
       <RoleViewBanner />
-      <Placeholder text="Conținutul acestei secțiuni urmează." />
+      <Placeholder text="Secțiune în lucru." />
     </>
   ),
 });

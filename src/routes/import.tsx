@@ -14,8 +14,8 @@ export const Route = createFileRoute("/import")({
   }),
   component: () => (
     <>
-      <PageHeader title="Import" subtitle="Importă tichete din Excel." />
-      <Placeholder text="Conținutul acestei secțiuni urmează." />
+      <PageHeader title="Import" subtitle="Încarcă un fișier Excel." />
+      <Placeholder text="Secțiune în lucru." />
     </>
   ),
 });

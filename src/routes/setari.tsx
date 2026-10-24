@@ -14,8 +14,8 @@ export const Route = createFileRoute("/setari")({
   }),
   component: () => (
     <>
-      <PageHeader title="Setări" subtitle="Configurarea verificărilor." />
-      <Placeholder text="Conținutul acestei secțiuni urmează." />
+      <PageHeader title="Setări" subtitle="Când și unde rulează agentul." />
+      <Placeholder text="Secțiune în lucru." />
     </>
   ),
 });
