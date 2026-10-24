@@ -284,4 +284,3 @@ function Index() {
     </>
   );
 }
-</content>
