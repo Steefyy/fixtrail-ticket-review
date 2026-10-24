@@ -15,6 +15,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Verifix: verificare automată a fix-urilor livrate pentru tichetele de suport." },
       { property: "og:title", content: "Prezentare generală · Verifix" },
       { property: "og:description", content: "Fix-uri confirmate, invalidate și tichete care necesită verificare manuală." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
@@ -22,12 +24,12 @@ export const Route = createFileRoute("/")({
 
 function Kpi({ label, value, icon, tone }: { label: string; value?: number | undefined; icon: ReactNode; tone: string }) {
   return (
-    <div className="rounded-xl border bg-card p-5">
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
-        {label}
-        <span className={`grid h-9 w-9 place-items-center rounded-full ${tone}`}>{icon}</span>
+    <div className="group rounded-3xl border border-border/50 bg-card p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+      <div className="flex min-h-14 items-start justify-between gap-3 text-sm font-medium leading-5 text-muted-foreground">
+        <span className="max-w-[150px] pt-1">{label}</span>
+        <span className={`icon-glow grid h-12 w-12 shrink-0 place-items-center rounded-full transition-transform duration-200 group-hover:scale-105 ${tone}`}>{icon}</span>
       </div>
-      <div className="mt-4 text-4xl font-semibold tabular-nums">
+      <div className="mt-5 text-4xl font-semibold tabular-nums">
         {value === undefined ? <Skeleton className="h-9 w-16" /> : value}
       </div>
     </div>
@@ -51,16 +53,16 @@ function DonutChart({ data }: { data: Stats | undefined }) {
   const total = fixuriConfirmate + fixuriInvalidate + necesitaVerificareManuala;
   const pct = total === 0 ? 0 : Math.round((fixuriConfirmate / total) * 100);
   return (
-    <div className="rounded-xl border bg-card p-5">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-sm font-medium">Distribuția fix-urilor verificate</h2>
-        <span className="text-xs text-muted-foreground">din {totalTichete} tichete</span>
+    <div className="rounded-3xl border border-border/50 bg-card p-6 shadow-sm sm:p-8">
+      <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-base font-semibold">Distribuția fix-urilor verificate</h2>
+        <span className="rounded-full bg-muted px-3 py-1.5 text-xs tabular-nums text-muted-foreground">din {totalTichete} tichete</span>
       </div>
-      <div className="flex flex-col items-center gap-6 sm:flex-row sm:gap-10">
-        <ChartContainer config={donutConfig} className="aspect-square h-[220px] w-[220px]">
+      <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+        <ChartContainer config={donutConfig} className="mx-auto aspect-square h-[280px] w-[280px] max-w-full">
           <PieChart>
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={70} outerRadius={105} strokeWidth={2}>
+            <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={95} outerRadius={125} paddingAngle={4} cornerRadius={7} strokeWidth={0}>
               {chartData.map((entry) => (
                 <Cell key={entry.key} fill={entry.fill} />
               ))}
@@ -70,7 +72,7 @@ function DonutChart({ data }: { data: Stats | undefined }) {
               y="46%"
               textAnchor="middle"
               dominantBaseline="middle"
-              className="fill-foreground text-3xl font-semibold tabular-nums"
+              className="fill-foreground text-4xl font-semibold tabular-nums"
             >
               {pct}%
             </text>
@@ -79,12 +81,12 @@ function DonutChart({ data }: { data: Stats | undefined }) {
             </text>
           </PieChart>
         </ChartContainer>
-        <ul className="grid w-full gap-3 sm:max-w-[260px]">
+        <ul className="grid w-full divide-y divide-border/60">
           {chartData.map((entry) => (
-            <li key={entry.key} className="flex items-center gap-3">
+            <li key={entry.key} className="flex items-center gap-3 py-5">
               <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: entry.fill }} />
               <span className="text-sm text-muted-foreground">{entry.name}</span>
-              <span className="ml-auto text-sm font-semibold tabular-nums">{entry.value}</span>
+              <span className="ml-auto text-xl font-semibold tabular-nums">{entry.value}</span>
             </li>
           ))}
         </ul>
@@ -99,13 +101,13 @@ function Index() {
     <>
       <PageHeader title="Prezentare generală" subtitle="Starea fix-urilor verificate de AI Testing Agent." />
       {error && <p className="mb-4 text-sm text-destructive">{error.message}</p>}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Kpi label="Total tichete" value={data?.totalTichete} icon={<ListChecks className="h-4 w-4" />} tone="tone-ai" />
-        <Kpi label="Fix-uri confirmate" value={data?.fixuriConfirmate} icon={<CheckCircle2 className="h-4 w-4" />} tone="tone-success" />
-        <Kpi label="Fix-uri invalidate de agent" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-4 w-4" />} tone="tone-danger" />
-        <Kpi label="Necesită verificare manuală" value={data?.necesitaVerificareManuala} icon={<Hand className="h-4 w-4" />} tone="tone-info" />
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <Kpi label="Total tichete" value={data?.totalTichete} icon={<ListChecks className="h-5 w-5" />} tone="tone-info" />
+        <Kpi label="Fix-uri confirmate" value={data?.fixuriConfirmate} icon={<CheckCircle2 className="h-5 w-5" />} tone="tone-success" />
+        <Kpi label="Fix-uri invalidate de agent" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-5 w-5" />} tone="tone-ai" />
+        <Kpi label="Necesită verificare manuală" value={data?.necesitaVerificareManuala} icon={<Hand className="h-5 w-5" />} tone="tone-warning" />
       </div>
-      <div className="mt-4">
+      <div className="mt-7">
         <DonutChart data={data} />
       </div>
     </>

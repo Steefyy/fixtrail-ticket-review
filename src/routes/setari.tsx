@@ -8,6 +8,8 @@ export const Route = createFileRoute("/setari")({
       { name: "description", content: "Configurarea verificărilor în Verifix." },
       { property: "og:title", content: "Setări · Verifix" },
       { property: "og:description", content: "Configurarea verificărilor în Verifix." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: () => (

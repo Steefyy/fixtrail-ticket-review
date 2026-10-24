@@ -8,6 +8,8 @@ export const Route = createFileRoute("/rapoarte")({
       { name: "description", content: "Rapoartele AI Testing Agent în Verifix." },
       { property: "og:title", content: "Rapoarte · Verifix" },
       { property: "og:description", content: "Rapoartele AI Testing Agent în Verifix." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: () => (

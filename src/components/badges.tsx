@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import type { Severitate, Status, Verdict } from "@/types";
 
-const base = "inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium whitespace-nowrap";
+const base = "inline-flex items-center gap-1 rounded-full border border-transparent px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-colors";
 
 const STATUS_CLS: Record<Status, string> = {
   Nou: "tone-info",

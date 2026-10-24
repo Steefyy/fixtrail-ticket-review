@@ -1,6 +1,6 @@
 @import "tailwindcss" source(none);
-@source "../src";
 @import "tw-animate-css";
+@source "../src";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -24,7 +24,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-3xl: 1.5rem;
   --radius-4xl: calc(var(--radius) + 16px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -47,6 +47,10 @@
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
   --color-success: var(--success);
+  --color-primary-end: var(--primary-end);
+  --shadow-sm: var(--shadow-surface);
+  --shadow-md: var(--shadow-surface-hover);
+  --shadow-action: var(--shadow-action-glow);
   --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --color-chart-1: var(--chart-1);
@@ -65,25 +69,31 @@
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: oklch(0.985 0.003 160);
-  --foreground: oklch(0.21 0.03 268);
+  --radius: 1rem;
+  --background: oklch(0.982 0.002 247);
+  --foreground: oklch(0.25 0.025 265);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.21 0.03 268);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.21 0.03 268);
-  --primary: oklch(0.62 0.15 160);
+  --primary: oklch(0.75 0.155 165);
+  --primary-end: oklch(0.62 0.115 184);
+  --gradient-primary: linear-gradient(115deg, var(--primary), var(--primary-end));
+  --shadow-surface: 0 4px 24px -8px oklch(0.25 0.025 265 / 0.07), 0 1px 3px oklch(0.25 0.025 265 / 0.02);
+  --shadow-surface-hover: 0 12px 32px -10px oklch(0.25 0.025 265 / 0.13);
+  --shadow-action-glow: 0 5px 16px -4px oklch(0.65 0.14 165 / 0.4);
+  --shadow-icon: 0 6px 18px -5px currentColor;
   --primary-foreground: oklch(0.99 0 0);
   --secondary: oklch(0.955 0.01 270);
   --secondary-foreground: oklch(0.3 0.05 270);
   --muted: oklch(0.96 0.006 264);
-  --muted-foreground: oklch(0.52 0.025 265);
-  --accent: oklch(0.95 0.04 160);
-  --accent-foreground: oklch(0.4 0.1 160);
+  --muted-foreground: oklch(0.54 0.019 265);
+  --accent: oklch(0.95 0.027 153);
+  --accent-foreground: oklch(0.42 0.105 165);
   --destructive: oklch(0.58 0.22 27);
   --destructive-foreground: oklch(0.99 0 0);
   --success: oklch(0.6 0.15 150);
-  --border: oklch(0.915 0.008 264);
+  --border: oklch(0.935 0.006 264);
   --input: oklch(0.915 0.008 264);
   --ring: oklch(0.62 0.15 160);
   --chart-1: oklch(0.62 0.15 160);
@@ -95,8 +105,8 @@
   --sidebar-foreground: oklch(0.21 0.03 268);
   --sidebar-primary: oklch(0.62 0.15 160);
   --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.94 0.05 160);
-  --sidebar-accent-foreground: oklch(0.38 0.1 160);
+  --sidebar-accent: oklch(0.95 0.027 153);
+  --sidebar-accent-foreground: oklch(0.42 0.105 165);
   --sidebar-border: oklch(0.915 0.008 264);
   --sidebar-ring: oklch(0.62 0.15 160);
   /* badge tones: bg / fg / border */
@@ -117,6 +127,10 @@
   --popover: oklch(0.21 0.018 268);
   --popover-foreground: oklch(0.96 0.005 264);
   --primary: oklch(0.7 0.15 160);
+  --primary-end: oklch(0.64 0.115 184);
+  --shadow-surface: 0 4px 24px -8px oklch(0.1 0.01 265 / 0.35);
+  --shadow-surface-hover: 0 12px 32px -10px oklch(0.1 0.01 265 / 0.5);
+  --shadow-action-glow: 0 5px 16px -4px oklch(0.65 0.14 165 / 0.25);
   --primary-foreground: oklch(0.15 0.02 268);
   --secondary: oklch(0.27 0.02 268);
   --secondary-foreground: oklch(0.96 0.005 264);
@@ -154,6 +168,8 @@
 @utility tone-info { background: var(--t-info); color: var(--t-info-fg); border-color: var(--t-info-b); }
 @utility tone-neutral { background: var(--t-neutral); color: var(--t-neutral-fg); border-color: var(--t-neutral-b); }
 @utility tone-ai { background: var(--t-ai); color: var(--t-ai-fg); border-color: var(--t-ai-b); }
+@utility bg-gradient-primary { background-image: var(--gradient-primary); }
+@utility icon-glow { box-shadow: var(--shadow-icon); }
 
 @layer base {
   * {
@@ -164,5 +180,15 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  * { letter-spacing: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
