@@ -16,5 +16,6 @@
 - Badge colors come from `tone-*` utilities in `src/styles.css`.
 - Shared surfaces, shadows, icon glows, and action gradients use semantic tokens in `src/styles.css`; gradient actions use the shared Button premium variant to keep presentation consistent.
 - Ticket filtering and verification eligibility live in browser-safe pure helpers, while the ticket route owns URL state and its shared Sheet owns details; this keeps API data unchanged and rules independently testable.
+- Overview priority cards reuse the cluster comparator and verdict helper, and open the shared TicketDetails Sheet; this avoids duplicate priority rules and detail workflows.
 - Fields that hold only a calendar date (`dataDeschiderii`, `dataLivrareFix`) render `dd.MM.yyyy` through `src/lib/dates.ts` without building a `Date`, so the day never shifts across timezones; only fields that carry a time show one.
 - The large capture of a failed step renders at full width with `object-contain` and natural height — never `object-cover` or a max-height — because the error message sits at the bottom of the screenshot and must stay visible.
