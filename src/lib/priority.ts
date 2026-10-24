@@ -11,3 +11,8 @@ export function comparaPrioritate(a: Ticket, b: Ticket): number {
 export function necesitaVerificareManuala(t: Ticket): boolean {
   return t.status === "Rezolvat – fix livrat" && !t.testabil;
 }
+
+/** A developer can pick up a ticket only while nobody has started it. */
+export function poatePrelua(t: Ticket): boolean {
+  return t.status === "Nou";
+}
