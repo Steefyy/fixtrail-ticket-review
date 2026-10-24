@@ -160,6 +160,30 @@ export function PageHeader({ title, subtitle }: { title: string; subtitle?: stri
   );
 }
 
+/** Tells the user which role's lens the current screen is showing. */
+export function RoleViewBanner() {
+  const { rol } = useRole();
+  const pm = rol === "pm";
+  return (
+    <div className={cn("mb-8 flex flex-wrap items-center gap-4 rounded-3xl border p-5 shadow-sm transition-colors duration-300", pm ? "tone-success" : "tone-info")}>
+      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-card/80 shadow-sm">
+        {pm ? <BriefcaseBusiness className="h-5 w-5" /> : <Code2 className="h-5 w-5" />}
+      </span>
+      <div className="min-w-0">
+        <p className="text-sm font-semibold">{pm ? "Vizualizare Product Manager" : "Vizualizare Developer"}</p>
+        <p className="mt-1 text-xs leading-5 opacity-80">
+          {pm
+            ? "Eficacitatea lansării, impactul asupra clienților și sinteza executivă a fix-urilor."
+            : "Jurnalele agentului, erorile DOM și stack trace-urile pentru tichetele eșuate sau redeschise."}
+        </p>
+      </div>
+      <span className="ml-auto rounded-full bg-card/80 px-3 py-1.5 text-xs font-medium shadow-sm">
+        {pm ? "Volum de business, nu listă de lucru" : "Only tickets you can take are counted"}
+      </span>
+    </div>
+  );
+}
+
 export function Placeholder({ text }: { text: string }) {
   return <div className="rounded-3xl border border-border/70 bg-card p-12 text-center text-sm text-muted-foreground shadow-sm">{text}</div>;
 }
