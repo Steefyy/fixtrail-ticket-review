@@ -1,10 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
-import { BadgeCheck, LayoutDashboard, Ticket, FileText, Upload, Settings, PanelLeftClose, PanelLeftOpen, BriefcaseBusiness, Code2, Sun, Moon } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { BadgeCheck, Loader2, PlayCircle, LayoutDashboard, Ticket, FileText, Upload, Settings, PanelLeftClose, PanelLeftOpen, BriefcaseBusiness, Code2, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRole } from "@/hooks/useRole";
 import { useTheme } from "@/hooks/useTheme";
-import { useSchedulerStatus } from "@/hooks/useVerifix";
+import { useRunVerification, useSchedulerStatus } from "@/hooks/useVerifix";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -31,12 +33,12 @@ function SchedulerIndicator() {
   }, []);
   const running = data?.ruleazaAcum;
   return (
-    <div className="hidden items-center gap-2.5 xl:flex">
+    <div className="flex items-center gap-2.5">
       <span className="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center" aria-hidden="true">
         <span className={cn("absolute inline-flex h-full w-full rounded-full bg-success", running ? "animate-ping opacity-75" : "animate-pulse opacity-60")} />
         <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-success" />
       </span>
-      <div className="flex items-center gap-2.5 rounded-full border border-border/70 bg-card px-3.5 py-2 text-xs tabular-nums text-muted-foreground shadow-sm">
+      <div className="hidden items-center gap-2.5 rounded-full border xl:flex border-border/70 bg-card px-3.5 py-2 text-xs tabular-nums text-muted-foreground shadow-sm">
         {running ? (
           <span className="font-medium text-foreground">Agentul verifică acum…</span>
         ) : (
@@ -47,6 +49,28 @@ function SchedulerIndicator() {
         )}
       </div>
     </div>
+  );
+}
+
+function VerifyButton() {
+  const { data } = useSchedulerStatus();
+  const run = useRunVerification();
+  const qc = useQueryClient();
+  const busy = !!data?.ruleazaAcum || run.isPending;
+  const prev = useRef(false);
+  useEffect(() => {
+    const r = !!data?.ruleazaAcum;
+    if (prev.current && !r) {
+      toast.success("Verificare terminată");
+      qc.invalidateQueries();
+    }
+    prev.current = r;
+  }, [data?.ruleazaAcum, qc]);
+  return (
+    <Button variant="premium" disabled={busy} onClick={() => run.mutate(undefined, { onError: (e) => toast.error(e.message) })} className="shrink-0 rounded-full">
+      {busy ? <Loader2 className="animate-spin" /> : <PlayCircle />}
+      {busy ? "Se verifică…" : "Verifică acum"}
+    </Button>
   );
 }
 
@@ -120,6 +144,7 @@ function TopBar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => v
           {tema === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
         <SchedulerIndicator />
+        <VerifyButton />
       </div>
     </header>
   );
