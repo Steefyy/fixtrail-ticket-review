@@ -34,6 +34,6 @@
 - [x] 28 de teste trec; filtre, reîncărcare URL, căutare fără rezultate și detalii verificate în ambele teme, cu datele demonstrative disponibile.
 
 # Product Manager exclusiv
-- [ ] Elimină selectorul, providerul, hook-ul și variantele Developer; curăță preferințele vechi fără a crea un rol implicit.
-- [ ] Păstrează dashboardul PM, paginile, verificările și detaliile tehnice din rapoarte.
-- [ ] Actualizează testele și verifică paginile principale, inclusiv cu preferința veche Developer.
+- [x] Elimină selectorul, providerul, hook-ul și variantele Developer; curăță preferințele vechi fără a crea un rol implicit.
+- [x] Păstrează dashboardul PM, paginile, verificările și detaliile tehnice din rapoarte; API-ul și modelele rămân neschimbate.
+- [x] 30 de teste trec; cele cinci pagini și detaliile raportului verificate în previzualizare, inclusiv cu preferința veche Developer și ambele teme. Verificările și importul nu au fost rerulate pe serverul extern.
