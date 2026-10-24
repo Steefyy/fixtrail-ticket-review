@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useTickets, useClusters } from "@/hooks/useVerifix";
+import { useTickets } from "@/hooks/useVerifix";
 import { filterTickets, parseTicketFilters, ticketVerdict, type TicketFilters } from "@/lib/ticketFilters";
 import { cn } from "@/lib/utils";
 import type { Ticket } from "@/types";
@@ -40,7 +40,6 @@ function TicketsPage() {
   const filters = Route.useSearch();
   const navigate = Route.useNavigate();
   const ticketsQuery = useTickets();
-  const clustersQuery = useClusters();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const tickets = ticketsQuery.data ?? [];
   const visible = filterTickets(tickets, filters);
@@ -83,6 +82,6 @@ function TicketsPage() {
       </tr>)}</tbody></table></div>
       <ul className="grid gap-3 md:hidden">{visible.map((t) => <li key={t.id}><Button variant="outline" aria-label={`Deschide ${t.id}`} onClick={() => setSelectedId(t.id)} className={cn("h-auto w-full flex-col items-start gap-3 rounded-xl bg-card p-4 text-left whitespace-normal", t.redeschisDeAgent && "border-l-2 border-l-destructive")}><span className="font-mono text-xs text-primary">{t.id}</span><span className="line-clamp-2 break-words font-medium leading-5">{t.titlu}</span><span className="flex max-w-full flex-wrap gap-2"><SeveritateBadge severitate={t.severitate} sursa={t.severitateSursa} /><StatusBadge status={t.status} /></span><TicketVerdictBadge ticket={t} /></Button></li>)}</ul>
     </>}
-    <TicketDetails ticket={tickets.find((t) => t.id === selectedId)} tickets={tickets} clusters={clustersQuery.data ?? []} onSelect={setSelectedId} onClose={() => setSelectedId(null)} />
+    <TicketDetails ticket={tickets.find((t) => t.id === selectedId)} onClose={() => setSelectedId(null)} />
   </TooltipProvider>;
 }

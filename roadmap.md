@@ -45,3 +45,7 @@
 # Eliminarea setărilor
 - [x] Elimină butonul din meniu, pagina /setari și tot ce ține de ea (tip, hook-uri, apeluri API).
 - [x] Teste și verificare în previzualizare: patru pagini rămase, fără legături spre Setări.
+
+# Panou detalii tichet simplificat
+- [x] Panoul lateral păstrează doar ID, titlu, badge-uri, raportări, descriere, pași numerotați cu „Rezultat așteptat", ultima verificare și butonul „Verifică acum"; câmpurile administrative rămân în date, neafișate.
+- [x] 31 de teste trec, build OK; verificat în previzualizare pentru tichet invalidat și redeschis, confirmat, neverificat și pe mobil (fără derulare orizontală).
