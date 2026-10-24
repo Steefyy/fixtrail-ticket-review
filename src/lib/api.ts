@@ -1,7 +1,7 @@
 import type { Cluster, ImportResult, Raport, SchedulerStatus, Settings, Stats, Status, Ticket } from "@/types";
 import { STATUSURI } from "@/types";
 import { buildClusters, createMockState, rerank } from "./mockData";
-import { necesitaVerificareManuala } from "./priority";
+import { necesitaVerificareManuala, poatePrelua } from "./priority";
 
 export interface AfterCheckApi {
   getTickets(): Promise<Ticket[]>;
@@ -31,6 +31,7 @@ export function computeStats(tickets: Ticket[]): Stats {
   const invalidate = tickets.filter((t) => t.redeschisDeAgent).length;
   return {
     totalTichete: tickets.length,
+    ticheteDisponibile: tickets.filter(poatePrelua).length,
     perStatus,
     fixuriConfirmate: tickets.filter((t) => t.status === "Rezolvat – fix livrat" && t.ultimaVerificare?.verdict === "trecut").length,
     fixuriInvalidate: invalidate,
