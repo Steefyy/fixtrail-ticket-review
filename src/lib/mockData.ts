@@ -92,7 +92,7 @@ function build(): Ticket[] {
     redeschisDeAgent: false,
     ultimaVerificare: null,
     ...s,
-    totalRaportariCluster: totals[s.clusterId],
+    totalRaportariCluster: totals[s.clusterId] ?? s.nrRaportari,
     testabil: Boolean(s.pasiVerificare),
     prioritate: 0,
   }));
