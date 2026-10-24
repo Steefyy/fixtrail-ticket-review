@@ -32,3 +32,8 @@
 - [x] Căutare și panou unic de filtre, selecții în URL, chip-uri și trei filtre rapide.
 - [x] Tabel compact și carduri pe mobil, cu aceleași detalii laterale.
 - [x] 28 de teste trec; filtre, reîncărcare URL, căutare fără rezultate și detalii verificate în ambele teme, cu datele demonstrative disponibile.
+
+# Product Manager exclusiv
+- [ ] Elimină selectorul, providerul, hook-ul și variantele Developer; curăță preferințele vechi fără a crea un rol implicit.
+- [ ] Păstrează dashboardul PM, paginile, verificările și detaliile tehnice din rapoarte.
+- [ ] Actualizează testele și verifică paginile principale, inclusiv cu preferința veche Developer.
