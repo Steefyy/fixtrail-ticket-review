@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { clearLegacyPreferences } from "@/lib/legacyPreferences";
 import { AppShell } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
@@ -108,8 +109,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   useEffect(() => {
     try {
-      localStorage.removeItem("aftercheck.rol");
-      localStorage.removeItem("verifix.rol");
+      clearLegacyPreferences(localStorage);
     } catch {
       // Storage may be unavailable; no preference is needed to render the app.
     }
@@ -117,10 +117,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-        <AppShell>
-          <Outlet />
-        </AppShell>
-        <Toaster richColors position="bottom-right" />
+      <AppShell>
+        <Outlet />
+      </AppShell>
+      <Toaster richColors position="bottom-right" />
     </QueryClientProvider>
   );
 }
