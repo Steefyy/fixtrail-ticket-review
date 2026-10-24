@@ -139,7 +139,7 @@ function buildReports(): Raport[] {
     raport("R-1027-1", "WB-1027", "picat", [
       { nr: 1, actiune: "Autentifică-te cu contul de test", rezultat: "ok" },
       { nr: 2, actiune: "Deschide rezervarea WBT5PAX (5 pasageri)", rezultat: "ok" },
-      { nr: 3, actiune: "Apasă „Fă check-in pentru toți”", rezultat: "picat", detalii: "Mesaj afișat: „Ceva nu a mers bine… (Cod CHK-500)”", selector: "button[data-testid='checkin-all']", durataMs: 8120 },
+      { nr: 3, actiune: "Apasă „Fă check-in pentru toți”", rezultat: "picat", detalii: "Mesaj afișat: „Ceva nu a mers bine… (Cod CHK-500)”", selector: "button[data-testid='checkin-all']", durataMs: 8120, screenshotUrl: "/tmp-shot.png" },
     ], "După apăsarea butonului de check-in pentru 5 pasageri, aplicația afișează eroarea „Ceva nu a mers bine… (Cod CHK-500)” în loc de boarding pass-uri. Fix-ul din 3.13.2 nu rezolvă problema pe 3.14.0.", "În lucru", 41, {
       eroriDom: [
         "Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'boardingPasses')",
