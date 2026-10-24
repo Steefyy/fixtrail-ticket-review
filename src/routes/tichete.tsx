@@ -69,7 +69,7 @@ function TicketsPage() {
     <section aria-label="Căutare și filtrare" className="mb-6">
       <div className="flex flex-wrap items-center gap-2.5 md:flex-nowrap">
         <div className="relative min-w-0 basis-full md:flex-1 md:basis-auto"><Search className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-muted-foreground" /><Input type="search" aria-label="Caută tichete" placeholder="Caută după ID, titlu sau descriere" value={filters.q ?? ""} onChange={(e) => update({ q: e.target.value || undefined })} className="h-11 pl-10 pr-3" /></div>
-        <TicketFiltersPanel filters={filters} categories={[...new Set(tickets.map((t) => t.categorie))].sort()} count={chips.length} update={update} />
+        <TicketFiltersPanel filters={filters} categories={[...new Set(tickets.map((t) => t.categorie))].sort()} update={update} />
         {active && <Button variant="ghost" className="h-11" onClick={reset}><RotateCcw />Resetează</Button>}
       </div>
       {active && <div className="mt-3 flex flex-wrap gap-2" aria-label="Filtre active">{chips.map((chip) => <Button key={chip.key} variant="secondary" size="sm" aria-label={`Elimină ${chip.label}`} onClick={chip.remove} className="h-auto min-h-8 max-w-full justify-between rounded-full py-1.5 text-left"><span className="min-w-0 break-words whitespace-normal">{chip.label}</span><X className="size-3.5" /></Button>)}</div>}

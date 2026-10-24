@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createMockState } from "@/lib/mockData";
-import { filterTickets, parseTicketFilters, ticketVerdict, verificationDisabledReason } from "@/lib/ticketFilters";
+import { advancedFilterCount, filterTickets, parseTicketFilters, ticketVerdict, verificationDisabledReason } from "@/lib/ticketFilters";
 
 const tickets = createMockState().tickets;
 const base = tickets[0];
@@ -54,5 +54,9 @@ describe("filtre tichete", () => {
     expect(verificationDisabledReason({ ...base, status: "Rezolvat – fix livrat", testabil: true })).toBeUndefined();
     expect(verificationDisabledReason({ ...base, status: "Nou", testabil: true })).toBeDefined();
     expect(verificationDisabledReason({ ...base, status: "Rezolvat – fix livrat", testabil: false })).toBeDefined();
+  });
+  it("badge-ul Filtre numără doar status, severitate și categorie", () => {
+    expect(advancedFilterCount({})).toBe(0);
+    expect(advancedFilterCount({ status: ["Nou"], severitate: ["Mare"], categorie: "Plăți", verdict: "picat", rapid: "atentie", q: "x" })).toBe(3);
   });
 });
