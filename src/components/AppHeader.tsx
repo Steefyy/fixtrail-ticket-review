@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { BadgeCheck, Play, LayoutDashboard, Ticket, FileText, Upload, Settings, PanelLeftClose, PanelLeftOpen, BriefcaseBusiness, Code2, Sun, Moon } from "lucide-react";
+import { BadgeCheck, LayoutDashboard, Ticket, FileText, Upload, Settings, PanelLeftClose, PanelLeftOpen, BriefcaseBusiness, Code2, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRole } from "@/hooks/useRole";
 import { useTheme } from "@/hooks/useTheme";
-import { useRunVerification, useSchedulerStatus } from "@/hooks/useVerifix";
+import { useSchedulerStatus } from "@/hooks/useVerifix";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -108,8 +108,6 @@ function Sidebar({ collapsed }: { collapsed: boolean }) {
 }
 
 function TopBar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
-  const run = useRunVerification();
-  const sched = useSchedulerStatus();
   const { tema, comuta } = useTheme();
   const etichetaTema = tema === "dark" ? "Fundal alb" : "Fundal negru";
   return (
@@ -122,9 +120,6 @@ function TopBar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => v
           {tema === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
         <SchedulerIndicator />
-        <Button variant="premium" className="h-11 rounded-full px-5" onClick={() => run.mutate(undefined)} disabled={run.isPending || sched.data?.ruleazaAcum}>
-          <Play className="h-3.5 w-3.5" /> Verifică acum
-        </Button>
       </div>
     </header>
   );
