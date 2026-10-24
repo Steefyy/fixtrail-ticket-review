@@ -43,5 +43,5 @@
 - [x] 30 de teste trec; lățimea, navigarea, tema și mobilul verificate în previzualizare.
 
 # Eliminarea setărilor
-- [ ] Elimină butonul din meniu, pagina /setari și tot ce ține de ea (tip, hook-uri, apeluri API).
-- [ ] Teste și verificare în previzualizare: patru pagini rămase, fără legături spre Setări.
+- [x] Elimină butonul din meniu, pagina /setari și tot ce ține de ea (tip, hook-uri, apeluri API).
+- [x] Teste și verificare în previzualizare: patru pagini rămase, fără legături spre Setări.
