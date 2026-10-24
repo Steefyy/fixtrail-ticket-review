@@ -9,6 +9,7 @@ export interface TicketFilters {
   verdict?: string | undefined;
   testabil?: boolean | undefined;
   redeschisDeAgent?: boolean | undefined;
+  rapid?: string | undefined;
 }
 
 const list = (v: unknown): string[] | undefined => {
@@ -23,6 +24,7 @@ export function parseTicketFilters(search: Record<string, unknown>): TicketFilte
     q: text(search['q']), status: list(search['status']), severitate: list(search['severitate']),
     categorie: text(search['categorie']), verdict: text(search['verdict']),
     testabil: flag(search['testabil']), redeschisDeAgent: flag(search['redeschisDeAgent'] ?? search['redeschise']),
+    rapid: text(search['rapid']),
   };
 }
 
@@ -39,7 +41,9 @@ export function filterTickets(tickets: Ticket[], f: TicketFilters): Ticket[] {
     (!f.severitate?.length || (t.severitate !== null && f.severitate.includes(t.severitate))) &&
     (!f.categorie || t.categorie === f.categorie) &&
     (!f.verdict || ticketVerdict(t) === f.verdict) &&
-    (!f.testabil || t.testabil) && (!f.redeschisDeAgent || t.redeschisDeAgent)
+    (!f.testabil || t.testabil) && (!f.redeschisDeAgent || t.redeschisDeAgent) &&
+    (f.rapid !== "atentie" || ticketVerdict(t) === "picat" || t.redeschisDeAgent || ticketVerdict(t) === "manual") &&
+    (f.rapid !== "confirmate" || ticketVerdict(t) === "trecut")
   ).sort((a, b) => a.prioritate - b.prioritate);
 }
 

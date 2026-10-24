@@ -27,3 +27,8 @@
 - [x] Cinci priorități compacte cu detalii laterale și legătură spre Tichete.
 - [x] Sinteză compactă și KPI-uri în două coloane pe mobil, fără schimbări API.
 - [x] Verifică ordinea, verdictul unic, navigarea și ambele teme; verificări în previzualizare cu datele demonstrative disponibile.
+
+# Tichete simplificate
+- [x] Căutare și panou unic de filtre, selecții în URL, chip-uri și trei filtre rapide.
+- [x] Tabel compact și carduri pe mobil, cu aceleași detalii laterale.
+- [x] 28 de teste trec; filtre, reîncărcare URL, căutare fără rezultate și detalii verificate în ambele teme, cu datele demonstrative disponibile.
