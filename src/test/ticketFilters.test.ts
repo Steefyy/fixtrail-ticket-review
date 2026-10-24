@@ -7,6 +7,25 @@ const base = tickets[0];
 if (!base) throw new Error("Missing ticket fixture");
 
 describe("filtre tichete", () => {
+  it("Necesită atenție include fixuri invalidate, redeschise și manuale fără duplicate", () => {
+    const t = { ...base, status: "Rezolvat – fix livrat" as const, testabil: true, redeschisDeAgent: false };
+    const result = filterTickets([
+      { ...t, id: "invalidat", ultimaVerificare: { verdict: "picat" as const, data: "", versiuneTestata: "", raportId: "" } },
+      { ...t, id: "redeschis", redeschisDeAgent: true, ultimaVerificare: null },
+      { ...t, id: "manual", testabil: false, ultimaVerificare: null },
+      { ...t, id: "nou", status: "Nou" as const, ultimaVerificare: null },
+    ], { rapid: "atentie" });
+    expect(result.map((ticket) => ticket.id)).toEqual(["invalidat", "redeschis", "manual"]);
+  });
+  it("Confirmate include numai verdictul trecut și păstrează filtrele avansate", () => {
+    const t = { ...base, status: "Rezolvat – fix livrat" as const, testabil: true, ultimaVerificare: { verdict: "trecut" as const, data: "", versiuneTestata: "", raportId: "" } };
+    expect(filterTickets([{ ...t, id: "confirmat", categorie: "Plăți" }, { ...t, id: "alta-categorie", categorie: "Altele" }, { ...t, id: "picat", categorie: "Plăți", ultimaVerificare: { ...t.ultimaVerificare, verdict: "picat" as const } }], { rapid: "confirmate", categorie: "Plăți" }).map((ticket) => ticket.id)).toEqual(["confirmat"]);
+  });
+  it("Toate elimină doar filtrul rapid, iar URL-ul păstrează selecția", () => {
+    const filters = parseTicketFilters({ rapid: "atentie", status: "Nou" });
+    expect(filters.rapid).toBe("atentie");
+    expect(filterTickets([{ ...base, id: "nou", status: "Nou", ultimaVerificare: null, redeschisDeAgent: false }, { ...base, id: "in-lucru", status: "În lucru" }], { ...filters, rapid: undefined }).map((ticket) => ticket.id)).toEqual(["nou"]);
+  });
   it("citește statusul simplu din URL și selecțiile multiple", () => {
     expect(parseTicketFilters({ status: "În lucru", verdict: "picat" })).toMatchObject({ status: ["În lucru"], verdict: "picat" });
     expect(parseTicketFilters({ status: ["Nou", "În lucru"] }).status).toEqual(["Nou", "În lucru"]);
