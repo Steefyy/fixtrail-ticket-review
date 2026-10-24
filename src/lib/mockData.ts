@@ -120,9 +120,18 @@ export function buildClusters(tickets: Ticket[]): Cluster[] {
   });
 }
 
-const raport = (id: string, ticketId: string, verdict: Raport["verdict"], pasiR: Raport["pasi"], explicatieAI: string, statusDupa: Status, durataSecunde: number): Raport => ({
+const raport = (
+  id: string,
+  ticketId: string,
+  verdict: Raport["verdict"],
+  pasiR: Raport["pasi"],
+  explicatieAI: string,
+  statusDupa: Status,
+  durataSecunde: number,
+  extra?: Partial<Raport>,
+): Raport => ({
   id, ticketId, data: RULARE, versiuneTestata: "3.14.0", verdict, pasi: pasiR, explicatieAI,
-  statusInainte: "Rezolvat – fix livrat", statusDupa, durataSecunde,
+  statusInainte: "Rezolvat – fix livrat", statusDupa, durataSecunde, ...extra,
 });
 
 function buildReports(): Raport[] {
@@ -130,16 +139,29 @@ function buildReports(): Raport[] {
     raport("R-1027-1", "WB-1027", "picat", [
       { nr: 1, actiune: "Autentifică-te cu contul de test", rezultat: "ok" },
       { nr: 2, actiune: "Deschide rezervarea WBT5PAX (5 pasageri)", rezultat: "ok" },
-      { nr: 3, actiune: "Apasă „Fă check-in pentru toți”", rezultat: "picat", detalii: "Mesaj afișat: „Ceva nu a mers bine… (Cod CHK-500)”" },
-    ], "După apăsarea butonului de check-in pentru 5 pasageri, aplicația afișează eroarea „Ceva nu a mers bine… (Cod CHK-500)” în loc de boarding pass-uri. Fix-ul din 3.13.2 nu rezolvă problema pe 3.14.0.", "În lucru", 41),
+      { nr: 3, actiune: "Apasă „Fă check-in pentru toți”", rezultat: "picat", detalii: "Mesaj afișat: „Ceva nu a mers bine… (Cod CHK-500)”", selector: "button[data-testid='checkin-all']", durataMs: 8120 },
+    ], "După apăsarea butonului de check-in pentru 5 pasageri, aplicația afișează eroarea „Ceva nu a mers bine… (Cod CHK-500)” în loc de boarding pass-uri. Fix-ul din 3.13.2 nu rezolvă problema pe 3.14.0.", "În lucru", 41, {
+      eroriDom: [
+        "Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'boardingPasses')",
+        "POST /api/checkin/batch → 500 {\"code\":\"CHK-500\",\"passengers\":5}",
+      ],
+      stackTrace:
+        "TypeError: Cannot read properties of undefined (reading 'boardingPasses')\n    at CheckInSummary.render (src/features/checkin/CheckInSummary.tsx:118:27)\n    at PassengerGroup.map (src/features/checkin/PassengerGroup.tsx:64:12)\n    at submitAll (src/features/checkin/submitAll.ts:41:9)",
+    }),
     raport("R-1022-1", "WB-1022", "picat", [
       { nr: 1, actiune: "Deschide boarding pass-ul pentru zborul W6 3101", rezultat: "ok" },
-      { nr: 2, actiune: "Mărește codul QR", rezultat: "picat", detalii: "Analiză vizuală: contrast insuficient" },
-    ], "Analiza vizuală Gemini: pătrățelele QR sunt gri deschis #c9cdd6 pe alb, contrast insuficient pentru scannerele de la poartă.", "În lucru", 28),
+      { nr: 2, actiune: "Mărește codul QR", rezultat: "picat", detalii: "Analiză vizuală: contrast insuficient", selector: "#boarding-pass canvas", durataMs: 3400 },
+    ], "Analiza vizuală Gemini: pătrățelele QR sunt gri deschis #c9cdd6 pe alb, contrast insuficient pentru scannerele de la poartă.", "În lucru", 28, {
+      eroriDom: ["Contrast QR #c9cdd6 pe #ffffff = 1.6:1 (minim cerut 4.5:1)"],
+      stackTrace: null,
+    }),
     raport("R-1036-1", "WB-1036", "picat", [
       { nr: 1, actiune: "Deschide boarding pass-ul pentru zborul W6 2207", rezultat: "ok" },
-      { nr: 2, actiune: "Verifică afișarea codului QR", rezultat: "picat", detalii: "Analiză vizuală: contrast insuficient" },
-    ], "Analiza vizuală Gemini: pătrățelele QR sunt gri deschis #c9cdd6 pe alb, contrast insuficient.", "În lucru", 25),
+      { nr: 2, actiune: "Verifică afișarea codului QR", rezultat: "picat", detalii: "Analiză vizuală: contrast insuficient", selector: "#boarding-pass canvas", durataMs: 2980 },
+    ], "Analiza vizuală Gemini: pătrățelele QR sunt gri deschis #c9cdd6 pe alb, contrast insuficient.", "În lucru", 25, {
+      eroriDom: ["Contrast QR #c9cdd6 pe #ffffff = 1.6:1 (minim cerut 4.5:1)", "Android 14 · WebView 118 — culoare override din theme.css"],
+      stackTrace: null,
+    }),
     raport("R-1016-1", "WB-1016", "trecut", [
       { nr: 1, actiune: "Caută zborul W6 4410 (A321neo)", rezultat: "ok" },
       { nr: 2, actiune: "Selectează tariful Basic", rezultat: "ok" },

@@ -43,6 +43,8 @@ export interface PasRaport {
   rezultat: "ok" | "picat" | "neexecutat";
   detalii?: string;
   screenshotUrl?: string;
+  selector?: string;
+  durataMs?: number;
 }
 export interface Raport {
   id: string;
@@ -55,9 +57,13 @@ export interface Raport {
   statusInainte: Status;
   statusDupa: Status;
   durataSecunde: number;
+  eroriDom?: string[];
+  stackTrace?: string | null;
 }
 export interface Stats {
   totalTichete: number;
+  /** Tickets nobody has picked up yet — a developer can take these. */
+  ticheteDisponibile: number;
   perStatus: Record<Status, number>;
   fixuriConfirmate: number;
   fixuriInvalidate: number;
