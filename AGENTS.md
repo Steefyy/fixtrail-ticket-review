@@ -15,3 +15,4 @@
 - Routing uses TanStack Router file routes (react-router is not supported in this stack).
 - Badge colors come from `tone-*` utilities in `src/styles.css`.
 - Shared surfaces, shadows, icon glows, and action gradients use semantic tokens in `src/styles.css`; gradient actions use the shared Button premium variant to keep presentation consistent.
+- Ticket filtering and verification eligibility live in browser-safe pure helpers, while the ticket route owns URL state and its shared Sheet owns details; this keeps API data unchanged and rules independently testable.
