@@ -24,6 +24,6 @@
 - [x] Verifică filtrele, navigarea și testele; verificarea individuală a fost exercitată în modul demonstrativ disponibil în sandbox, nu pe serverul extern.
 
 # Prezentare generală simplificată
-- [ ] Cinci priorități compacte cu detalii laterale și legătură spre Tichete.
-- [ ] Sinteză compactă și KPI-uri în două coloane pe mobil, fără schimbări API.
-- [ ] Verifică ordinea, verdictul unic, navigarea și ambele teme.
+- [x] Cinci priorități compacte cu detalii laterale și legătură spre Tichete.
+- [x] Sinteză compactă și KPI-uri în două coloane pe mobil, fără schimbări API.
+- [x] Verifică ordinea, verdictul unic, navigarea și ambele teme; verificări în previzualizare cu datele demonstrative disponibile.
