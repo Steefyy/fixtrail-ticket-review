@@ -22,3 +22,8 @@
 - [x] Filtre în URL, scurtături numerice și tabel după prioritatea primită.
 - [x] Detalii laterale, tichete asociate și verificare individuală.
 - [x] Verifică filtrele, navigarea și testele; verificarea individuală a fost exercitată în modul demonstrativ disponibil în sandbox, nu pe serverul extern.
+
+# Prezentare generală simplificată
+- [x] Cinci priorități compacte cu detalii laterale și legătură spre Tichete.
+- [x] Sinteză compactă și KPI-uri în două coloane pe mobil, fără schimbări API.
+- [x] Verifică ordinea, verdictul unic, navigarea și ambele teme; verificări în previzualizare cu datele demonstrative disponibile.

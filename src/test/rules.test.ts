@@ -9,6 +9,9 @@ describe("reguli dashboard", () => {
   it("picat câștigă în fața lui trecut", () => expect(verificareCluster([t({ ultimaVerificare: v("trecut") }), t({ ultimaVerificare: v("picat") })])).toBe("picat"));
   it("trecut dacă nu e niciun picat", () => expect(verificareCluster([t({ ultimaVerificare: v("trecut") })])).toBe("trecut"));
   it("manual pentru fix livrat netestabil", () => expect(verificareCluster([t({ status: "Rezolvat – fix livrat", testabil: false })])).toBe("manual"));
+  it("un test trecut are întâietate față de verificarea manuală", () => {
+    expect(verificareCluster([t({ status: "Rezolvat – fix livrat", testabil: false }), t({ ultimaVerificare: v("trecut") })])).toBe("trecut");
+  });
   it("nimic altfel", () => expect(verificareCluster([t({})])).toBeNull());
   it("severitatea înaintea raportărilor", () => {
     const l = [{ severitateMax: "Mare" as const, totalRaportari: 900 }, { severitateMax: "Critică" as const, totalRaportari: 1 }, { severitateMax: "Mare" as const, totalRaportari: 950 }].sort(comparaClustere);
