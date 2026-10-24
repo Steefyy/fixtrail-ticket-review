@@ -49,9 +49,11 @@ describe("impact după release", () => {
     const decrease = impacts.find((i) => i.ticketId === "WB-1016");
     const increase = impacts.find((i) => i.ticketId === "WB-1027");
     if (!decrease || !increase) throw new Error("Missing fixture");
-    expect(impactTrend(decrease).tone).toBe("tone-success");
+    expect(impactTrend(decrease).arrow).toBe("↓");
+    expect(impactTrend(decrease).tone).toBe("text-success-ink");
     expect(impactTrend(decrease).label).toContain("78%");
-    expect(impactTrend(increase).tone).toBe("tone-danger");
+    expect(impactTrend(increase).arrow).toBe("↑");
+    expect(impactTrend(increase).tone).toBe("text-danger-ink");
   });
   it("resetarea elimină și impacturile demo", async () => {
     const api = createMockApi();
