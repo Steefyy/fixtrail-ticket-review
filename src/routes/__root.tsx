@@ -13,7 +13,6 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "@/components/AppHeader";
-import { RoleProvider } from "@/hooks/useRole";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -107,15 +106,21 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useEffect(() => {
+    try {
+      localStorage.removeItem("aftercheck.rol");
+      localStorage.removeItem("verifix.rol");
+    } catch {
+      // Storage may be unavailable; no preference is needed to render the app.
+    }
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RoleProvider>
         <AppShell>
           <Outlet />
         </AppShell>
         <Toaster richColors position="bottom-right" />
-      </RoleProvider>
     </QueryClientProvider>
   );
 }

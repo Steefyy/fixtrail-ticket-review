@@ -11,7 +11,10 @@ describe("prioritizare", () => {
     expect(iCritic).toBeLessThan(iMare);
   });
   it("la aceeași severitate, clusterul cu mai multe raportări e primul", () => {
-    expect(t.find((x) => x.id === "WB-1040")!.prioritate).toBeLessThan(t.find((x) => x.id === "WB-1011")!.prioritate);
+    const family = t.find((x) => x.id === "WB-1040");
+    const assistance = t.find((x) => x.id === "WB-1011");
+    if (!family || !assistance) throw new Error("Missing fixtures");
+    expect(family.prioritate).toBeLessThan(assistance.prioritate);
   });
   it("Rezolvat fără pași = verificare manuală", () => {
     const s = computeStats(t);
@@ -21,16 +24,18 @@ describe("prioritizare", () => {
   });
 });
 
-describe("rol developer", () => {
+describe("compatibilitate statistici", () => {
   const t = createMockState().tickets;
-  it("numără doar tichetele pe care developerul le poate prelua", () => {
+  it("păstrează numărul tichetelor disponibile din contractul API", () => {
     const s = computeStats(t);
     expect(s.ticheteDisponibile).toBe(6);
     expect(s.totalTichete).toBe(20);
   });
   it("un tichet deja accesat nu mai poate fi preluat", () => {
-    expect(poatePrelua(t.find((x) => x.id === "WB-1040")!)).toBe(true); // Nou
-    expect(poatePrelua(t.find((x) => x.id === "WB-1027")!)).toBe(false); // În lucru
-    expect(poatePrelua(t.find((x) => x.id === "WB-1016")!)).toBe(false); // Rezolvat – fix livrat
+    for (const [id, available] of [["WB-1040", true], ["WB-1027", false], ["WB-1016", false]] as const) {
+      const ticket = t.find((x) => x.id === id);
+      if (!ticket) throw new Error("Missing fixture");
+      expect(poatePrelua(ticket)).toBe(available);
+    }
   });
 });

@@ -1,20 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, ChevronDown, Hand, ListChecks, RotateCcw } from "lucide-react";
+import { ArrowRight, CheckCircle2, Hand, ListChecks, RotateCcw } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { PieChart, Pie, Cell } from "recharts";
 import { PageHeader } from "@/components/AppHeader";
-import { SeveritateBadge, VerdictBadge } from "@/components/badges";
-import { EroriTehnice, PasiRaport } from "@/components/ReportSteps";
+import { SeveritateBadge } from "@/components/badges";
 import { comparaClustere, procentConfirmate, verificareCluster } from "@/lib/priority";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 import { Button } from "@/components/ui/button";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { TicketDetails } from "@/components/TicketDetails";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRole } from "@/hooks/useRole";
-import { useClusters, useReports, useStats, useTickets } from "@/hooks/useVerifix";
+import { useClusters, useStats, useTickets } from "@/hooks/useVerifix";
 import { cn } from "@/lib/utils";
-import type { Raport, Stats } from "@/types";
+import type { Stats } from "@/types";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -40,16 +38,6 @@ function Kpi({ label, value, icon, tone }: { label: string; value?: number | und
       <div className="mt-5 text-3xl font-extrabold sm:text-4xl tabular-nums text-ink">
         {value === undefined ? <Skeleton className="h-9 w-16" /> : value}
       </div>
-    </div>
-  );
-}
-
-function Tile({ label, value, helper, tone }: { label: string; value: ReactNode; helper: string; tone: string }) {
-  return (
-    <div className={cn("rounded-2xl p-4 transition-colors", tone)}>
-      <p className="text-xs font-medium opacity-80">{label}</p>
-      <p className="mt-2 text-2xl font-extrabold tabular-nums">{value}</p>
-      <p className="mt-1 text-[11px] leading-4 opacity-75">{helper}</p>
     </div>
   );
 }
@@ -109,7 +97,7 @@ function DonutChart({ data }: { data: Stats | undefined }) {
   );
 }
 
-/** Product Manager: business impact and release efficacy. */
+/** Business impact and release efficacy. */
 function SintezaExecutiva({ data }: { data: Stats | undefined }) {
   if (!data) return <Skeleton className="mt-7 h-72 w-full rounded-3xl" />;
   const eficacitate = procentConfirmate(data.fixuriConfirmate, data.fixuriInvalidate);
@@ -130,84 +118,6 @@ function SintezaExecutiva({ data }: { data: Stats | undefined }) {
         <DonutChart data={data} />
       </div>
     </section>
-  );
-}
-
-/** Developer: what the agent actually hit while running. */
-function InsightsTehnice() {
-  const { data: rapoarte } = useReports();
-  const { data: tichete } = useTickets();
-  if (!rapoarte) return <Skeleton className="mt-7 h-28 w-full rounded-3xl" />;
-  const esuate = rapoarte.filter((r) => r.verdict !== "trecut");
-  const erori = esuate.reduce((a, r) => a + (r.eroriDom?.length ?? 0), 0);
-  const stack = esuate.filter((r) => r.stackTrace).length;
-  const medie = esuate.length ? Math.round(esuate.reduce((a, r) => a + r.durataSecunde, 0) / esuate.length) : 0;
-  const zombie = (tichete ?? []).filter((t) => t.redeschisDeAgent).length;
-  return (
-    <div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <Tile label="Erori DOM" value={erori} helper="în rulările eșuate" tone="tone-danger" />
-      <Tile label="Stack trace-uri" value={stack} helper="din consola browserului" tone="tone-ai" />
-      <Tile label="Timp mediu / verificare" value={`${medie}s`} helper="pe rulare" tone="tone-info" />
-      <Tile label="Tichete zombie" value={zombie} helper="redeschise după fix" tone="tone-warning" />
-    </div>
-  );
-}
-
-function JurnaleAgent() {
-  const { data: rapoarte } = useReports();
-  const { data: tichete } = useTickets();
-  const [deschis, setDeschis] = useState<string | null>(null);
-  if (!rapoarte) return <Skeleton className="mt-7 h-64 w-full rounded-3xl" />;
-  const esuate = rapoarte.filter((r) => r.verdict !== "trecut").sort((a, b) => b.data.localeCompare(a.data));
-  const titlu = (id: string) => (tichete ?? []).find((t) => t.id === id)?.titlu ?? "—";
-  return (
-    <section className="mt-7 rounded-3xl border border-border/50 bg-card p-6 shadow-sm sm:p-8">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-base font-semibold">Jurnale Agent AI</h2>
-        <span className="rounded-full bg-muted px-3 py-1.5 text-xs tabular-nums text-muted-foreground">{esuate.length} rulări eșuate</span>
-      </div>
-      <ul className="mt-6 grid gap-3">
-        {esuate.map((r) => {
-          const open = deschis === r.id;
-          return (
-            <li key={r.id} className="overflow-hidden rounded-2xl border border-border/60">
-              <button
-                type="button"
-                aria-expanded={open}
-                onClick={() => setDeschis(open ? null : r.id)}
-                className="flex w-full items-center gap-3 bg-muted/40 px-4 py-3.5 text-left transition-colors hover:bg-muted/70"
-              >
-                <VerdictBadge verdict={r.verdict} />
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium">
-                    {r.ticketId} · {titlu(r.ticketId)}
-                  </span>
-                  <span className="mt-0.5 block text-xs tabular-nums text-muted-foreground">
-                    v{r.versiuneTestata} · {r.durataSecunde}s · {r.pasi.length} pași
-                  </span>
-                </span>
-                <ChevronDown className={cn("h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200", open && "rotate-180")} />
-              </button>
-              {open && <DetaliiRulare raport={r} />}
-            </li>
-          );
-        })}
-      </ul>
-    </section>
-  );
-}
-
-function DetaliiRulare({ raport }: { raport: Raport }) {
-  return (
-    <div className="grid gap-3.5 border-t border-border/60 p-4 sm:p-5">
-      <PasiRaport pasi={raport.pasi} />
-      <EroriTehnice raport={raport} />
-      <div className="rounded-xl bg-muted/40 p-3 text-xs leading-5 text-muted-foreground">
-        <span className="font-semibold text-foreground">De ce: </span>
-        {raport.explicatieAI}
-      </div>
-      <Link to="/rapoarte/$id" params={{ id: raport.id }} className="text-xs font-semibold text-primary hover:underline">Deschide raportul →</Link>
-    </div>
   );
 }
 
@@ -266,8 +176,6 @@ function Prioritati() {
 
 function Index() {
   const { data, error } = useStats();
-  const { rol } = useRole();
-  const dev = rol === "dev";
   return (
     <>
       <PageHeader title="Prezentare generală" />
@@ -279,16 +187,7 @@ function Index() {
         <Kpi label="Necesită verificare manuală" value={data?.necesitaVerificareManuala} icon={<Hand className="h-5 w-5" />} tone="tone-warning" />
       </div>
       <Prioritati />
-      {dev ? (
-        <>
-          <InsightsTehnice />
-          <JurnaleAgent />
-        </>
-      ) : (
-        <>
-          <SintezaExecutiva data={data} />
-        </>
-      )}
+      <SintezaExecutiva data={data} />
     </>
   );
 }
