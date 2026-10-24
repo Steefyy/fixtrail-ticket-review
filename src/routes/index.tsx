@@ -40,7 +40,7 @@ const donutConfig = {
   manuale: { label: "Necesită verificare manuală", color: "var(--t-info-fg)" },
 } satisfies ChartConfig;
 
-function DonutChart({ data }: { data?: Awaited<ReturnType<typeof api.getStats>> }) {
+function DonutChart({ data }: { data?: Stats }) {
   if (!data) return null;
   const { fixuriConfirmate, fixuriInvalidate, necesitaVerificareManuala, totalTichete } = data;
   const chartData = [
@@ -104,6 +104,9 @@ function Index() {
         <Kpi label="Fix-uri confirmate" value={data?.fixuriConfirmate} icon={<CheckCircle2 className="h-4 w-4" />} tone="tone-success" />
         <Kpi label="Fix-uri invalidate de agent" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-4 w-4" />} tone="tone-danger" />
         <Kpi label="Necesită verificare manuală" value={data?.necesitaVerificareManuala} icon={<Hand className="h-4 w-4" />} tone="tone-info" />
+      </div>
+      <div className="mt-4">
+        <DonutChart data={data} />
       </div>
     </>
   );
