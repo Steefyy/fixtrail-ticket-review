@@ -1,4 +1,4 @@
-import type { Cluster, ImportResult, PostReleaseImpact, Raport, SchedulerStatus, Stats, Status, Ticket } from "@/types";
+import type { Cluster, ImportResult, PostReleaseFeedbackImportResult, PostReleaseImpact, Raport, SchedulerStatus, Stats, Status, Ticket } from "@/types";
 import { STATUSURI } from "@/types";
 import { buildClusters, createMockState, rerank } from "./mockData";
 import { necesitaVerificareManuala, poatePrelua } from "./priority";
@@ -12,6 +12,7 @@ export interface AfterCheckApi {
   getReports(ticketId?: string): Promise<Raport[]>;
   getReport(id: string): Promise<Raport>;
   importExcel(file: File): Promise<ImportResult>;
+  importPostReleaseFeedback(file: File): Promise<PostReleaseFeedbackImportResult>;
   runVerification(ticketIds?: string[]): Promise<SchedulerStatus>;
   getSchedulerStatus(): Promise<SchedulerStatus>;
   clearDemoData(): Promise<{ ticheteSterse: number; rapoarteSterse: number }>;
@@ -74,6 +75,9 @@ export function createMockApi(): AfterCheckApi {
       st.tickets = rerank(st.tickets);
       return delay({ importate: st.tickets.length, severitatiCompletateDeAI: st.tickets.filter((t) => t.severitateSursa === "llm").length, clustere: buildClusters(st.tickets).length });
     },
+    importPostReleaseFeedback: async () => {
+      throw new Error("Importul feedbackului necesită conexiunea la server.");
+    },
     runVerification: async (ticketIds) => {
       st.ruleazaAcum = true;
       const now = new Date().toISOString();
@@ -118,6 +122,11 @@ export function createHttpApi(base: string): AfterCheckApi {
       const fd = new FormData();
       fd.append("file", file);
       return req("/api/import", { method: "POST", body: fd });
+    },
+    importPostReleaseFeedback: (file) => {
+      const fd = new FormData();
+      fd.append("file", file);
+      return req("/api/post-release-feedback/import", { method: "POST", body: fd });
     },
     runVerification: (ticketIds) => req("/api/verify/run", json("POST", { ticketIds })),
     getSchedulerStatus: () => req("/api/verify/status"),
