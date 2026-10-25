@@ -1,7 +1,7 @@
 # Două surse în Import
 - [x] Păstrează importul Excel și adaugă CSV feedback prin adaptorul API existent.
 - [x] Două zone independente, validare extensii, rezultate și erori separate.
-- [ ] Teste pentru contract și invalidare; verificare în previzualizare.
+- [x] 49 de teste trec; extensii și erori independente verificate pe calculator și mobil, fără erori sau derulare laterală; importul reușit pe serverul extern rămâne neverificat, iar modul mock nu inventează rezultate CSV.
 
 # AfterCheck rebranding
 - [x] Impact după release: contract, șapte exemple demo, hook și invalidare.
