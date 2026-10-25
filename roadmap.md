@@ -1,7 +1,6 @@
-# AfterCheck rebranding
 # Două surse în Import
-- [ ] Păstrează importul Excel și adaugă CSV feedback prin adaptorul API existent.
-- [ ] Două zone independente, validare extensii, rezultate și erori separate.
+- [x] Păstrează importul Excel și adaugă CSV feedback prin adaptorul API existent.
+- [x] Două zone independente, validare extensii, rezultate și erori separate.
 - [ ] Teste pentru contract și invalidare; verificare în previzualizare.
 
 # AfterCheck rebranding

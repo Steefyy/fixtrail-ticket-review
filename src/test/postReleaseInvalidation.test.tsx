@@ -3,7 +3,7 @@ import { act, renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { api } from "@/lib/api";
-import { useClearDemoData, useImport, useRunVerification } from "@/hooks/useVerifix";
+import { useClearDemoData, useImport, useImportPostReleaseFeedback, useRunVerification } from "@/hooks/useVerifix";
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -15,6 +15,13 @@ function setup() {
 }
 
 describe("actualizarea impactului după acțiuni", () => {
+  it("importul feedbackului invalidează impactul", async () => {
+    vi.spyOn(api, "importPostReleaseFeedback").mockResolvedValue({ importate: 12, ticheteAsociate: 3, ignorate: 2, canale: ["support"] });
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useImportPostReleaseFeedback(), { wrapper });
+    await act(async () => { await result.current.mutateAsync(new File([], "feedback.csv")); });
+    expect(client.getQueryState(["post-release-impact"])?.isInvalidated).toBe(true);
+  });
   it("importul invalidează impactul", async () => {
     vi.spyOn(api, "importExcel").mockResolvedValue({ importate: 7, clustere: 7, severitatiCompletateDeAI: 0 });
     const { client, wrapper } = setup();
