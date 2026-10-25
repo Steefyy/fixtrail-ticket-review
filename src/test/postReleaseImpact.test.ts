@@ -30,12 +30,20 @@ describe("impact după release", () => {
     expect(impacts.find((i) => i.ticketId === "WB-1008")?.concluzie).toBe("necesita_monitorizare");
     expect(reports.find((r) => r.ticketId === "WB-1008")?.verdict).toBe("trecut");
   });
-  it("numără doar concluziile fix_confirmat, nu toate scăderile", () => {
+  it("numără scăderile reclamațiilor independent de verdictul tehnic", () => {
     const impacts = createMockState().impacts;
     expect(countReducedProblems(impacts)).toBe(2);
     const first = impacts[0];
     if (!first) throw new Error("Missing fixture");
-    expect(countReducedProblems([{ ...first, concluzie: "necesita_monitorizare" }])).toBe(0);
+    expect(countReducedProblems([{ ...first, trend: "scadere", concluzie: "necesita_monitorizare" }])).toBe(1);
+    expect(countReducedProblems([{ ...first, trend: "stabil", concluzie: "fix_confirmat" }])).toBe(0);
+    const postImport = Array.from({ length: 7 }, (_, index) => ({
+      ...first,
+      ticketId: `post-import-${index}`,
+      trend: index < 5 ? "scadere" as const : "stabil" as const,
+      concluzie: index < 2 ? "fix_confirmat" as const : index < 5 ? "fix_invalidat" as const : "necesita_monitorizare" as const,
+    }));
+    expect(countReducedProblems(postImport)).toBe(5);
     expect(countReducedProblems([])).toBe(0);
   });
   it("nu asociază unui raport impactul altei versiuni", () => {
