@@ -1,4 +1,10 @@
 # AfterCheck rebranding
+# Două surse în Import
+- [ ] Păstrează importul Excel și adaugă CSV feedback prin adaptorul API existent.
+- [ ] Două zone independente, validare extensii, rezultate și erori separate.
+- [ ] Teste pentru contract și invalidare; verificare în previzualizare.
+
+# AfterCheck rebranding
 - [x] Impact după release: contract, șapte exemple demo, hook și invalidare.
 - [x] Card în raport, coloană în listă și un KPI în prezentarea generală, cu stări independente.
 - [x] Teste și verificare în previzualizare cu date demo: scădere, stabil, creștere și finalizare verificare; fără modificări backend. Serverul extern nu a fost verificat.
