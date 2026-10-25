@@ -17,7 +17,7 @@ export function impactTrend(impact: PostReleaseImpact, complaints = false) {
 }
 
 export const countReducedProblems = (impacts: PostReleaseImpact[]) =>
-  impacts.filter((impact) => impact.concluzie === "fix_confirmat").length;
+  impacts.filter((impact) => impact.trend === "scadere").length;
 
 export function findLatestImpact(impacts: PostReleaseImpact[], ticketId: string, version?: string) {
   return impacts.filter((impact) => impact.ticketId === ticketId && (!version || impact.versiune === version))

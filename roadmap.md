@@ -1,3 +1,8 @@
+# KPI monitorizare și distribuție
+- [x] Adaugă monitorizarea din Stats și trei segmente cu procent din total.
+- [x] Numără scăderile reclamațiilor, fără rezultate inventate sau modificări API/import.
+- [x] 54 de teste trec și compilarea automată este OK; răspunsuri izolate de test verifică KPI 7/2/3/2/5, grafic 29%, legendă 2/3/2 și impact gol fără rezultate inventate, fără erori; importul real pe server extern rămâne neverificat.
+
 # Două surse în Import
 - [x] Păstrează importul Excel și adaugă CSV feedback prin adaptorul API existent.
 - [x] Două zone independente, validare extensii, rezultate și erori separate.

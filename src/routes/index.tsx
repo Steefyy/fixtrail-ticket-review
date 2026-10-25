@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, ListChecks, RotateCcw, TrendingDown } from "lucide-react";
+import { ArrowRight, CheckCircle2, Eye, ListChecks, RotateCcw, TrendingDown } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { PieChart, Pie, Cell } from "recharts";
 import { PageHeader } from "@/components/AppHeader";
@@ -12,6 +12,7 @@ import { TicketDetails } from "@/components/TicketDetails";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useClusters, usePostReleaseImpacts, useStats, useTickets } from "@/hooks/useVerifix";
 import { countReducedProblems } from "@/lib/postReleaseImpact";
+import { overviewVerification } from "@/lib/overviewStats";
 import { cn } from "@/lib/utils";
 import type { Stats } from "@/types";
 
@@ -45,18 +46,19 @@ function Kpi({ label, value, icon, tone, footer }: { label: string; value?: numb
 }
 
 const donutConfig = {
-  confirmate: { label: "Fix-uri confirmate", color: "var(--t-success-fg)" },
+  confirmate: { label: "Fix-uri confirmate", color: "var(--ink)" },
   invalidate: { label: "Fix-uri invalidate", color: "var(--t-danger-fg)" },
+  monitorizare: { label: "Necesită monitorizare", color: "var(--muted-foreground)" },
 } satisfies ChartConfig;
 
 function DonutChart({ data }: { data: Stats | undefined }) {
   if (!data) return null;
-  const { fixuriConfirmate, fixuriInvalidate } = data;
+  const { confirmate, invalidate, monitorizare, procentConfirmate: pct } = overviewVerification(data);
   const chartData = [
-    { name: donutConfig.confirmate.label, key: "confirmate", value: fixuriConfirmate, fill: "var(--t-success-fg)" },
-    { name: donutConfig.invalidate.label, key: "invalidate", value: fixuriInvalidate, fill: "var(--t-danger-fg)" },
+    { name: donutConfig.confirmate.label, key: "confirmate", value: confirmate, fill: donutConfig.confirmate.color },
+    { name: donutConfig.invalidate.label, key: "invalidate", value: invalidate, fill: donutConfig.invalidate.color },
+    { name: donutConfig.monitorizare.label, key: "monitorizare", value: monitorizare, fill: donutConfig.monitorizare.color },
   ];
-  const pct = procentConfirmate(fixuriConfirmate, fixuriInvalidate);
   return (
     <div className="min-w-0">
       <h3 className="text-sm font-semibold">Fixuri verificate</h3>
@@ -79,7 +81,7 @@ function DonutChart({ data }: { data: Stats | undefined }) {
               {pct}%
             </text>
             <text x="50%" y="58%" textAnchor="middle" dominantBaseline="middle" className="fill-muted-foreground text-xs">
-              din fix-urile testate
+              din totalul tichetelor
             </text>
           </PieChart>
         </ChartContainer>
@@ -185,6 +187,7 @@ function Index() {
         <Kpi label="Total tichete" value={data?.totalTichete} icon={<ListChecks className="h-5 w-5" />} tone="text-ink" />
         <Kpi label="Fix-uri confirmate" value={data?.fixuriConfirmate} icon={<CheckCircle2 className="h-5 w-5" />} tone="text-ink" />
         <Kpi label="Fix-uri invalidate de agent" value={data?.fixuriInvalidate} icon={<RotateCcw className="h-5 w-5" />} tone="text-ink" />
+        <Kpi label="Necesită monitorizare" value={data ? overviewVerification(data).monitorizare : undefined} icon={<Eye className="h-5 w-5" />} tone="text-ink" />
         <Kpi label="Probleme reduse după release" value={impacts.isPending ? undefined : impacts.error || !impacts.data?.length ? "—" : countReducedProblems(impacts.data)} icon={<TrendingDown className="h-5 w-5" />} tone="text-ink" />
       </div>
       <Prioritati />

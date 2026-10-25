@@ -22,5 +22,6 @@
 - Ticket filtering and verification eligibility live in browser-safe pure helpers, while the ticket route owns URL state and its shared Sheet owns details; this keeps API data unchanged and rules independently testable.
 - Ticket quick filters compose with advanced filters in the existing pure helper; a direct filter-panel component reuses the same controls in a desktop Popover and mobile Sheet so URL state remains the single source of truth.
 - Overview priority cards reuse the cluster comparator and verdict helper, and open the shared TicketDetails Sheet; this avoids duplicate priority rules and detail workflows.
+- Overview verification values use a browser-safe Stats projection with a future monitoring alias and total-ticket denominator; this keeps API compatibility and makes KPI/chart rules independently testable.
 - Fields that hold only a calendar date (`dataDeschiderii`, `dataLivrareFix`) render `dd.MM.yyyy` through `src/lib/dates.ts` without building a `Date`, so the day never shifts across timezones; only fields that carry a time show one.
 - The large capture of a failed step renders at full width with `object-contain` and natural height — never `object-cover` or a max-height — because the error message sits at the bottom of the screenshot and must stay visible.
