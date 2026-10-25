@@ -94,3 +94,9 @@ export interface ImportResult {
   severitatiCompletateDeAI: number;
   clustere: number;
 }
+export interface PostReleaseFeedbackImportResult {
+  importate: number;
+  ticheteAsociate: number;
+  ignorate: number;
+  canale: string[];
+}

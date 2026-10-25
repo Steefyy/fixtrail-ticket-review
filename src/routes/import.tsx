@@ -8,16 +8,17 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useClearDemoData, useImport } from "@/hooks/useVerifix";
+import { useClearDemoData, useImport, useImportPostReleaseFeedback } from "@/hooks/useVerifix";
+import { importFileError } from "@/lib/importFiles";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/import")({
   head: () => ({
     meta: [
       { title: "Import · AfterCheck" },
-      { name: "description", content: "Importă tichete din Excel în AfterCheck." },
+      { name: "description", content: "Importă tichete Excel și feedback post-release CSV în AfterCheck." },
       { property: "og:title", content: "Import · AfterCheck" },
-      { property: "og:description", content: "Importă tichete din Excel în AfterCheck." },
+      { property: "og:description", content: "Importă tichete Excel și feedback post-release CSV în AfterCheck." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -27,38 +28,75 @@ export const Route = createFileRoute("/import")({
 
 function ImportPage() {
   const imp = useImport();
+  const feedback = useImportPostReleaseFeedback();
+  return (
+    <>
+      <PageHeader title="Import" />
+      <div className="space-y-10">
+        <section aria-labelledby="ticket-import-title">
+          <h2 id="ticket-import-title" className="text-lg font-semibold">Tichete</h2>
+          <p className="mt-1 mb-4 text-sm text-muted-foreground">Fișier Excel cu problemele raportate și pașii de verificare.</p>
+          <UploadZone title="Tichete" extension=".xlsx" pending={imp.isPending} onImport={(file) => imp.mutate(file)} onReset={() => imp.reset()} error={imp.error?.message} />
+          {imp.data && (
+            <div role="status" className="mt-4 space-y-4 border-l-2 border-border pl-4">
+              <p className="text-sm font-medium tabular-nums">{imp.data.importate} tichete importate · {imp.data.severitatiCompletateDeAI} severități completate de AI · {imp.data.clustere} probleme identificate</p>
+              <Button asChild variant="premium" className="max-w-full whitespace-normal"><Link to="/">Mergi la Prezentare generală</Link></Button>
+            </div>
+          )}
+        </section>
+        <section aria-labelledby="feedback-import-title" className="border-t border-border pt-8">
+          <h2 id="feedback-import-title" className="text-lg font-semibold">Feedback post-release</h2>
+          <p className="mt-1 mb-4 text-sm text-muted-foreground">Evenimente anonimizate din support și magazinele de aplicații.</p>
+          <UploadZone title="Feedback post-release" extension=".csv" pending={feedback.isPending} onImport={(file) => feedback.mutate(file)} onReset={() => feedback.reset()} error={feedback.error?.message} />
+          {feedback.data && (
+            <div role="status" className="mt-4 space-y-2 border-l-2 border-border pl-4 text-sm">
+              <p className="font-medium tabular-nums">{feedback.data.importate} evenimente importate · {feedback.data.ticheteAsociate} tichete asociate · {feedback.data.ignorate} evenimente ignorate</p>
+              {feedback.data.canale.length > 0 && <p className="break-words text-muted-foreground">Canale: {feedback.data.canale.join(", ")}</p>}
+            </div>
+          )}
+        </section>
+      </div>
+      <ResetDemoData />
+    </>
+  );
+}
+
+function UploadZone({ title, extension, pending, onImport, onReset, error }: {
+  title: string;
+  extension: ".xlsx" | ".csv";
+  pending: boolean;
+  onImport: (file: File) => void;
+  onReset: () => void;
+  error: string | undefined;
+}) {
   const ref = useRef<HTMLInputElement>(null);
   const [drag, setDrag] = useState(false);
-  const trimite = (f?: File) => {
-    if (f) imp.mutate(f);
+  const [fileError, setFileError] = useState<string | null>(null);
+  const trimite = (file?: File) => {
+    if (!file || pending) return;
+    onReset();
+    const validation = importFileError(file, extension);
+    setFileError(validation);
+    if (!validation) onImport(file);
   };
   return (
     <>
-      <PageHeader title="Import" subtitle="Încarcă un fișier Excel." />
-      <div
-        role="button"
-        tabIndex={0}
+      <Button
+        variant="outline"
+        disabled={pending}
+        aria-label={`Încarcă ${title} ${extension}`}
+        aria-busy={pending}
         onClick={() => ref.current?.click()}
-        onKeyDown={(e) => e.key === "Enter" && ref.current?.click()}
-        onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+        onDragOver={(e) => { e.preventDefault(); if (!pending) setDrag(true); }}
         onDragLeave={() => setDrag(false)}
         onDrop={(e) => { e.preventDefault(); setDrag(false); trimite(e.dataTransfer.files[0]); }}
-        className={cn("grid cursor-pointer place-items-center gap-3 rounded-3xl border-2 border-dashed border-border bg-card p-14 text-center transition-colors", drag && "border-primary bg-primary/5")}
+        className={cn("h-auto min-h-40 w-full flex-col gap-3 whitespace-normal rounded-3xl border-2 border-dashed border-border bg-card px-6 py-8 text-center shadow-none hover:bg-muted/50", drag && "border-primary bg-primary/5")}
       >
-        {imp.isPending ? <Loader2 className="h-8 w-8 animate-spin text-primary" /> : <Upload className="h-8 w-8 text-primary" />}
-        <p className="font-medium">{imp.isPending ? "Se importă…" : "Trage aici fișierul .xlsx sau apasă ca să-l alegi"}</p>
-        <input ref={ref} type="file" accept=".xlsx" className="hidden" onChange={(e) => { trimite(e.target.files?.[0]); e.target.value = ""; }} />
-      </div>
-      {imp.error && <p className="mt-4 rounded-2xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">{imp.error.message}</p>}
-      {imp.data && (
-        <div className="mt-6 rounded-3xl border border-border/50 bg-card p-6 shadow-sm">
-          <p className="font-medium tabular-nums">
-            {imp.data.importate} tichete importate · {imp.data.severitatiCompletateDeAI} severități completate de AI · {imp.data.clustere} probleme identificate
-          </p>
-          <Button asChild variant="premium" className="mt-4"><Link to="/">Mergi la Prezentare generală</Link></Button>
-        </div>
-      )}
-      <ResetDemoData />
+        {pending ? <Loader2 className="!size-7 animate-spin text-primary" /> : <Upload className="!size-7 text-muted-foreground" />}
+        <span>{pending ? "Se importă…" : `Trage aici fișierul ${extension} sau apasă ca să-l alegi`}</span>
+      </Button>
+      <input ref={ref} type="file" aria-label={`Fișier ${title}`} accept={extension} disabled={pending} className="hidden" onChange={(e) => { trimite(e.target.files?.[0]); e.target.value = ""; }} />
+      {(fileError || error) && <p role="alert" className="mt-4 break-words rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">{fileError || error}</p>}
     </>
   );
 }

@@ -29,6 +29,10 @@ export const useImport = () => {
   const inv = useInvalidateAll();
   return useMutation({ mutationFn: (file: File) => api.importExcel(file), onSuccess: inv });
 };
+export const useImportPostReleaseFeedback = () => {
+  const inv = useInvalidateAll();
+  return useMutation({ mutationFn: (file: File) => api.importPostReleaseFeedback(file), onSuccess: inv });
+};
 export const useClearDemoData = () => {
   const inv = useInvalidateAll();
   return useMutation({ mutationFn: () => api.clearDemoData(), onSuccess: inv });
